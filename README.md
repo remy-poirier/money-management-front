@@ -8,4 +8,4 @@ This is the front-end application responsible of the money management product.
 - React 
 - Typescript
 - Heroku for deployment
-- Shadcn
+- Shadcn for ui
