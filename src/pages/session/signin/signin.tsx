@@ -41,8 +41,8 @@ export const Signin = () => {
     resolver: zodResolver(signupSchema),
     mode: 'onChange',
     defaultValues: {
-      email: 'test@test.com',
-      password: '12345678',
+      email: '',
+      password: '',
     },
     shouldFocusError: false,
   })

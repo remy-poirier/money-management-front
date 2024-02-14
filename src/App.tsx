@@ -44,11 +44,11 @@ function App() {
               MoneyManager
             </span>
           </Link>
-          <div className="hidden md:flex gap-4">
+          <div className="hidden md:flex items-center gap-4">
             {user && (
               <>
                 <Link to="/users">
-                  <Button variant="ghost">Utilisateurs</Button>
+                  <Button variant="outline">Utilisateurs</Button>
                 </Link>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -59,7 +59,7 @@ function App() {
                           alt={user?.fullName ?? user.email}
                         />
                       )}
-                      <AvatarFallback>
+                      <AvatarFallback className="bg-primary">
                         {(user?.fullName ?? user.email).slice(0, 2)}
                       </AvatarFallback>
                     </Avatar>
@@ -83,10 +83,10 @@ function App() {
             {!user && (
               <>
                 <Link to="/signup">
-                  <Button variant="ghost">Inscription</Button>
+                  <Button variant="outline">Inscription</Button>
                 </Link>
                 <Link to="/login">
-                  <Button variant="ghost">Connexion</Button>
+                  <Button variant="outline">Connexion</Button>
                 </Link>
               </>
             )}
