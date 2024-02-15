@@ -36,6 +36,7 @@ const authStatusFn = (): Promise<AuthResponse> => {
 export const useAuthStatus = () => {
   const setUser = useUserStore((state) => state.setUser)
   const { isLoading } = useQuery({
+    queryKey: ['account'],
     retry: false,
     refetchOnWindowFocus: false,
     queryFn: async () => {

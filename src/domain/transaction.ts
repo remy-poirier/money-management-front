@@ -15,12 +15,13 @@ export interface Transaction {
   archived: boolean
 
   // Maybe we'll directly get category instead of id, or both
+  category_id: string
 
   createdAt: string
   updatedAt: string
 }
 
-export type TransactionCreation = Omit<
+export type TransactionForm = Omit<
   Transaction,
   'id' | 'createdAt' | 'updatedAt'
 >

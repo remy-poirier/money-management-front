@@ -42,6 +42,7 @@ import {
   XCircle,
 } from 'lucide-react'
 import { useGetTransactions } from '@/hooks/transactions/get-transactions.tsx'
+import { TransactionFormActions } from '@/pages/transactions/transaction-form-actions.tsx'
 
 interface Props {
   categories: Category[]
@@ -79,11 +80,12 @@ export const TransactionsTable = (props: Props) => {
   }
 
   const toggleCollected = (transaction: Transaction) => () => {
-    transactionActions.toggleCollected(transaction)
+    // Maybe find a way to display loader here
+    transactionActions.toggleCollected.mutateAsync(transaction.id)
   }
 
   const archiveTransaction = (transaction: Transaction) => () => {
-    transactionActions.archive(transaction)
+    transactionActions.archive.mutateAsync(transaction.id)
   }
 
   const renderTransactionActions = (transaction: Transaction) => {
@@ -147,7 +149,13 @@ export const TransactionsTable = (props: Props) => {
           </Label>
         </div>
 
-        {transactionActions && <h2>Mettre expense form ici</h2>}
+        {transactionActions && (
+          <TransactionFormActions
+            submitHandler={transactionActions.add.mutateAsync}
+            categories={props.categories}
+            type={props.type}
+          />
+        )}
       </div>
 
       <Table className="hidden md:table">

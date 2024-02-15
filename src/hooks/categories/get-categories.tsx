@@ -1,14 +1,11 @@
-import { Paginate } from '@/domain/paginate.ts'
 import { common } from '@/conf/common.ts'
 import { useQuery } from 'react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
-import { Transaction, TransactionType } from '@/domain/transaction.ts'
+import { Category } from '@/domain/category.ts'
 
-const getTransactionsFn = async (
-  type: TransactionType,
-): Promise<Paginate<Transaction>> => {
-  return fetch(`${common.apiUrl}/transactions?type=${type}`, {
+const getCategoriesFn = async (): Promise<Category[]> => {
+  return fetch(`${common.apiUrl}/categories`, {
     method: 'GET',
     credentials: 'include',
   })
@@ -26,25 +23,23 @@ const getTransactionsFn = async (
     })
 }
 
-export const useGetTransactions = (type: TransactionType) => {
+export const useGetCategories = () => {
   const { data, isError, error, isLoading } = useQuery(
-    ['transactions'],
-    async () => {
-      return await getTransactionsFn(type)
-    },
+    ['categories'],
+    getCategoriesFn,
     {},
   )
 
   useEffect(() => {
     if (isError && error) {
       toast.error(`Oops ! Une erreur s'est produite`, {
-        description: `Erreur lors de la récupération des transactions (${error})`,
+        description: `Erreur lors de la récupération des catégories (${error})`,
       })
     }
   }, [isError, error])
 
   return {
-    transactions: data,
+    categories: data,
     isLoading,
   }
 }
