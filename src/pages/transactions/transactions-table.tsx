@@ -30,7 +30,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card.tsx'
-import { Transaction, TransactionType } from '@/domain/transaction.ts'
+import {
+  Transaction,
+  TransactionForm,
+  TransactionType,
+} from '@/domain/transaction.ts'
 import { Category } from '@/domain/category'
 import { useTheme } from '@/components/theme-provider.tsx'
 import { useTransactionActions } from '@/hooks/transactions/transaction-actions.tsx'
@@ -49,7 +53,7 @@ interface Props {
   type: TransactionType
 }
 export const TransactionsTable = (props: Props) => {
-  const { type } = props
+  const { type, categories } = props
   const transactionActions = useTransactionActions()
   const { theme } = useTheme()
   const { transactions: transactionData, isLoading: loading } =
@@ -88,6 +92,15 @@ export const TransactionsTable = (props: Props) => {
     transactionActions.archive.mutateAsync(transaction.id)
   }
 
+  const editTransaction =
+    (transaction: Transaction) =>
+    async (transactionEdition: TransactionForm) => {
+      return transactionActions.update.mutateAsync({
+        id: transaction.id,
+        transactionEdition,
+      })
+    }
+
   const renderTransactionActions = (transaction: Transaction) => {
     if (!transactionActions) {
       return <></>
@@ -106,7 +119,14 @@ export const TransactionsTable = (props: Props) => {
             <CheckCircle2 size={20} />
           )}
         </Button>
-        <h2>Mettre expense form ici</h2>
+        {!transaction.archived && !transaction.collected && (
+          <TransactionFormActions
+            type={type}
+            mode="edit"
+            submitHandler={editTransaction(transaction)}
+            categories={categories}
+          />
+        )}
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="destructive" size="icon-sm" className="py-5 px-10">
@@ -152,8 +172,8 @@ export const TransactionsTable = (props: Props) => {
         {transactionActions && (
           <TransactionFormActions
             submitHandler={transactionActions.add.mutateAsync}
-            categories={props.categories}
-            type={props.type}
+            categories={categories}
+            type={type}
           />
         )}
       </div>
@@ -227,7 +247,15 @@ export const TransactionsTable = (props: Props) => {
                         )}
                       </Button>
 
-                      <h2>Mettre expense form ici</h2>
+                      {!transaction.archived && !transaction.collected && (
+                        <TransactionFormActions
+                          transaction={transaction}
+                          type={type}
+                          mode="edit"
+                          submitHandler={editTransaction(transaction)}
+                          categories={categories}
+                        />
+                      )}
 
                       <AlertDialog>
                         <AlertDialogTrigger asChild>

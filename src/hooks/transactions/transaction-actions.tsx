@@ -27,6 +27,38 @@ const addTransactionFn = async (
     })
 }
 
+const updateTransactionFn = async ({
+  id,
+  transactionEdition,
+}: {
+  id: string
+  transactionEdition: TransactionForm
+}): Promise<Transaction> => {
+  return fetch(`${common.apiUrl}/transactions`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id,
+      ...transactionEdition,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        return Promise.reject(res)
+      }
+      return res.json()
+    })
+    .catch((error) => {
+      return Promise.reject(
+        error.statusText ??
+          "Oops, une erreur s'est produite, veuillez réessayer ultérieurement.",
+      )
+    })
+}
+
 const toggleCollectedTransactionFn = async (
   id: string,
 ): Promise<Transaction> => {
@@ -52,7 +84,7 @@ const toggleCollectedTransactionFn = async (
     })
 }
 
-const deleteTransactionFn = async (id: string): Promise<Transaction> => {
+const deleteTransactionFn = async (id: string): Promise<void> => {
   return fetch(`${common.apiUrl}/transactions/archive`, {
     method: 'POST',
     credentials: 'include',
@@ -85,6 +117,7 @@ export const useTransactionActions = () => {
     mutationFn: toggleCollectedTransactionFn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
+      queryClient.invalidateQueries({ queryKey: ['account'] })
     },
   })
 
@@ -95,12 +128,16 @@ export const useTransactionActions = () => {
     },
   })
 
+  const updateMutation = useMutation({
+    mutationFn: updateTransactionFn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['transactions'] })
+    },
+  })
+
   return {
     add: addTransactionMutation,
-    update: (t: TransactionForm) => {
-      console.log('to implement => ', t)
-      return Promise.resolve()
-    },
+    update: updateMutation,
     toggleCollected: toggleCollectedMutation,
     archive: deleteMutation,
   }

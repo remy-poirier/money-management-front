@@ -166,7 +166,11 @@ function App() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuLabel>
-                      Connecté(e) en tant que {user.fullName ?? user.email}
+                      Connecté(e) en tant que {user.fullName ?? user.email}{' '}
+                      <br />
+                      <span className="text-xs italic font-light">
+                        Montant sur compte: {user.balance}€
+                      </span>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {user.isAdmin && (

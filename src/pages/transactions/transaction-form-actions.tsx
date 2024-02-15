@@ -12,7 +12,7 @@ import { TransactionForm } from '@/pages/transactions/transaction-form.tsx'
 interface Props {
   type: TransactionType
   categories: Category[]
-  expense?: Transaction
+  transaction?: Transaction
   mode?: 'add' | 'edit'
   submitHandler: (transaction: TransactionFormSchema) => Promise<Transaction>
 }
@@ -21,7 +21,7 @@ export const TransactionFormActions = ({
   type,
   categories,
   mode = 'add',
-  expense,
+  transaction,
   submitHandler,
 }: PropsWithChildren<Props>) => {
   const [open, setOpen] = useState<boolean>(false)
@@ -57,7 +57,7 @@ export const TransactionFormActions = ({
           mode={mode}
           submitHandler={submitHandler}
           categories={categories}
-          expense={expense}
+          expense={transaction}
         />
       )}
     </>

@@ -71,6 +71,7 @@ export const TransactionForm = ({
   submitHandler,
   categories,
   onOpenChange,
+  mode,
 }: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
   const queryClient = useQueryClient()
@@ -124,7 +125,7 @@ export const TransactionForm = ({
     })
       .then(() => {
         form.reset()
-        toast('Félicitations', {
+        toast.success('Félicitations', {
           description: `Opération effectuée avec succès`,
         })
         onClose()
@@ -200,6 +201,7 @@ export const TransactionForm = ({
                     </div>
                     <FormControl>
                       <Switch
+                        {...(mode === 'edit' && { disabled: true })}
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />
