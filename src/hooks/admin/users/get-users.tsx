@@ -1,9 +1,9 @@
-import { User } from '@/domain/User.ts'
 import { common } from '@/conf/common.ts'
 import { useQuery } from 'react-query'
 import { toast } from 'sonner'
 import { useEffect } from 'react'
 import { Paginate } from '@/domain/paginate.ts'
+import { User } from '@/domain/user.ts'
 
 const getUsersFn = async (): Promise<Paginate<User>> => {
   return fetch(`${common.apiUrl}/admin/users`, {

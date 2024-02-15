@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { User } from '@/domain/User.ts'
+import { User } from '@/domain/user.ts'
 
 interface UserStore {
   user?: User

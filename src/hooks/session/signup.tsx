@@ -1,5 +1,5 @@
 import { useMutation } from 'react-query'
-import { User } from '@/domain/User.ts'
+import { User } from '@/domain/user.ts'
 import { common } from '@/conf/common.ts'
 import { toast } from 'sonner'
 import { useEffect } from 'react'

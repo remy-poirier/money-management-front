@@ -1,7 +1,7 @@
-import { User } from '@/domain/User.ts'
 import { common } from '@/conf/common.ts'
 import { useQuery } from 'react-query'
 import { useUserStore } from '@/store/store.ts'
+import { User } from '@/domain/user.ts'
 
 type AuthSuccessResponse = {
   state: 'authenticated'

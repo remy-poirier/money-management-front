@@ -1,4 +1,4 @@
-import { User } from '@/domain/User.ts'
+import { User } from '@/domain/user.ts'
 import { common } from '@/conf/common.ts'
 import { useMutation } from 'react-query'
 import { useEffect } from 'react'
