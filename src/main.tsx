@@ -11,6 +11,9 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { Signin } from '@/pages/session/signin/signin.tsx'
 import { AdminRoute } from '@/conf/admin-route.tsx'
 import { Users } from '@/pages/admin/users/users.tsx'
+import { Dashboard } from '@/pages/dashboard/dashboard.tsx'
+import { Transactions } from '@/pages/transactions/transactions.tsx'
+import { LoggedRoute } from '@/conf/logged-route.tsx'
 
 const router = createBrowserRouter([
   {
@@ -31,13 +34,28 @@ const router = createBrowserRouter([
         element: <Signin />,
       },
       {
-        path: 'admin',
-        element: <AdminRoute />,
+        path: 'app',
+        element: <LoggedRoute />,
         errorElement: <ErrorPage />,
         children: [
           {
-            path: 'users',
-            element: <Users />,
+            path: 'dashboard',
+            element: <Dashboard />,
+          },
+          {
+            path: 'transactions',
+            element: <Transactions />,
+          },
+          {
+            path: 'admin',
+            element: <AdminRoute />,
+            errorElement: <ErrorPage />,
+            children: [
+              {
+                path: 'users',
+                element: <Users />,
+              },
+            ],
           },
         ],
       },
