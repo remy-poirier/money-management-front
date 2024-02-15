@@ -37,6 +37,7 @@ export const useAuthStatus = () => {
   const setUser = useUserStore((state) => state.setUser)
   const { isLoading } = useQuery({
     retry: false,
+    refetchOnWindowFocus: false,
     queryFn: async () => {
       return authStatusFn().then((data) => {
         if (data.state === 'authenticated') {

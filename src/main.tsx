@@ -9,6 +9,8 @@ import { Home } from '@/pages/home/home.tsx'
 import { ErrorPage } from '@/pages/error/error.tsx'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Signin } from '@/pages/session/signin/signin.tsx'
+import { AdminRoute } from '@/conf/admin-route.tsx'
+import { Users } from '@/pages/admin/users/users.tsx'
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,17 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <Signin />,
+      },
+      {
+        path: 'admin',
+        element: <AdminRoute />,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: 'users',
+            element: <Users />,
+          },
+        ],
       },
     ],
   },

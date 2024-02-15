@@ -47,15 +47,18 @@ function App() {
           <div className="hidden md:flex items-center gap-4">
             {user && (
               <>
-                <Link to="/users">
-                  <Button variant="outline">Utilisateurs</Button>
-                </Link>
+                {user.isAdmin && (
+                  <Link to="/admin/users">
+                    <Button variant="outline">Utilisateurs</Button>
+                  </Link>
+                )}
+
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Avatar className="cursor-pointer w-[2rem] h-[2rem]">
-                      {user.avatar_url && (
+                      {user.avatarUrl && (
                         <AvatarImage
-                          src={user.avatar_url}
+                          src={user.avatarUrl}
                           alt={user?.fullName ?? user.email}
                         />
                       )}
@@ -97,7 +100,15 @@ function App() {
           </div>
         </div>
       </header>
-      <Outlet />
+      <div className="relative flex min-h-screen flex-col bg-background">
+        <main className="flex-1">
+          <div className="container relative max-w-screen-2xl">
+            <section className="py-2">
+              <Outlet />
+            </section>
+          </div>
+        </main>
+      </div>
       <Toaster richColors />
     </div>
   )

@@ -2,9 +2,10 @@ export interface User {
   id: string
   email: string
   fullName?: string
-  avatar_url?: string
+  avatarUrl?: string
   balance: number
+  isAdmin: boolean
 
-  created_at: Date
-  updated_at: Date
+  createdAt: Date
+  updatedAt: Date
 }
