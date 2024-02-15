@@ -21,7 +21,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <input
           type={type}
-          className={cn('w-full outline-none bg-transparent', className)}
+          className={cn(
+            'w-full outline-none bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
+            className,
+          )}
           ref={ref}
           {...props}
         />
