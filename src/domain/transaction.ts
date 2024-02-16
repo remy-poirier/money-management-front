@@ -27,7 +27,7 @@ export interface Transaction {
 
 export type TransactionForm = Omit<
   Transaction,
-  'id' | 'createdAt' | 'updatedAt'
+  'id' | 'createdAt' | 'updatedAt' | 'category'
 >
 
 export interface TransactionSearch {
