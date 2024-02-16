@@ -3,12 +3,22 @@ import { common } from '@/conf/common.ts'
 import { useQuery } from 'react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
-import { Transaction, TransactionType } from '@/domain/transaction.ts'
+import { Transaction, TransactionSearch } from '@/domain/transaction.ts'
 
 const getTransactionsFn = async (
-  type: TransactionType,
+  transactionSearch: TransactionSearch,
 ): Promise<Paginate<Transaction>> => {
-  return fetch(`${common.apiUrl}/transactions?type=${type}`, {
+  // Create url with query params
+  const url = new URL(`${common.apiUrl}/transactions`)
+
+  // For each key in transactionSearch, add a query param to the url
+  Object.keys(transactionSearch).forEach((key) => {
+    const value = transactionSearch[key as keyof TransactionSearch]
+    if (value !== undefined) {
+      url.searchParams.append(key, String(value))
+    }
+  })
+  return fetch(url, {
     method: 'GET',
     credentials: 'include',
   })
@@ -26,11 +36,17 @@ const getTransactionsFn = async (
     })
 }
 
-export const useGetTransactions = (type: TransactionType) => {
-  const { data, isError, error, isLoading } = useQuery(
-    ['transactions'],
+export const useGetTransactions = (transactionSearch: TransactionSearch) => {
+  const { data, isError, error, isLoading, refetch } = useQuery(
+    [
+      'transactions',
+      transactionSearch.page,
+      transactionSearch.collected,
+      transactionSearch.search,
+      transactionSearch.orderByDirection,
+    ],
     async () => {
-      return await getTransactionsFn(type)
+      return await getTransactionsFn(transactionSearch)
     },
     {},
   )
@@ -45,6 +61,7 @@ export const useGetTransactions = (type: TransactionType) => {
 
   return {
     transactions: data,
+    refetchTransactions: refetch,
     isLoading,
   }
 }

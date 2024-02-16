@@ -125,6 +125,7 @@ export const useTransactionActions = () => {
     mutationFn: deleteTransactionFn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
+      queryClient.invalidateQueries({ queryKey: ['account'] })
     },
   })
 

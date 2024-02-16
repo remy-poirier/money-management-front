@@ -27,7 +27,9 @@ export const useGetCategories = () => {
   const { data, isError, error, isLoading } = useQuery(
     ['categories'],
     getCategoriesFn,
-    {},
+    {
+      refetchOnWindowFocus: false,
+    },
   )
 
   useEffect(() => {

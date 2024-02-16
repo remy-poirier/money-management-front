@@ -1,3 +1,5 @@
+import { Category } from '@/domain/category.ts'
+
 export enum TransactionType {
   RECURRING = 'RECURRING',
   ONE_TIME = 'ONE_TIME',
@@ -14,6 +16,8 @@ export interface Transaction {
   type: TransactionType
   archived: boolean
 
+  category: Category
+
   // Maybe we'll directly get category instead of id, or both
   category_id: string
 
@@ -25,3 +29,11 @@ export type TransactionForm = Omit<
   Transaction,
   'id' | 'createdAt' | 'updatedAt'
 >
+
+export interface TransactionSearch {
+  type: TransactionType
+  collected?: boolean
+  page?: number
+  search?: string
+  orderByDirection: 'asc' | 'desc'
+}

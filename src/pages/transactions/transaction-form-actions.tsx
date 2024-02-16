@@ -32,7 +32,7 @@ export const TransactionFormActions = ({
   return (
     <>
       {mode === 'add' && (
-        <div className="flex flex-1 justify-end">
+        <div className="flex justify-end">
           <Button onClick={onOpen}>+ Ajouter</Button>
         </div>
       )}

@@ -42,11 +42,24 @@ import {
   Banknote,
   CalendarDays,
   CheckCircle2,
+  SortAsc,
+  SortDesc,
   Trash2,
   XCircle,
 } from 'lucide-react'
 import { useGetTransactions } from '@/hooks/transactions/get-transactions.tsx'
 import { TransactionFormActions } from '@/pages/transactions/transaction-form-actions.tsx'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination.tsx'
+import { useDebounce } from '@uidotdev/usehooks'
+import { Input } from '@/components/ui/input.tsx'
 
 interface Props {
   categories: Category[]
@@ -56,20 +69,28 @@ export const TransactionsTable = (props: Props) => {
   const { type, categories } = props
   const transactionActions = useTransactionActions()
   const { theme } = useTheme()
+  const [showCollected, setShowCollected] = useState(false)
+  const [page, setPage] = useState(1)
+  const [searchText, setSearchText] = useState('')
+  const debouncedSearch = useDebounce(searchText, 300)
+  const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>(
+    'desc',
+  )
+
   const { transactions: transactionData, isLoading: loading } =
-    useGetTransactions(type)
+    useGetTransactions({
+      type,
+      page,
+      collected: showCollected ? undefined : false,
+      search: debouncedSearch,
+      orderByDirection,
+    })
 
   const transactions = transactionData?.data ?? []
 
   const iconColor = theme === 'dark' ? 'rgb(59, 130, 246)' : 'rgb(37, 99, 235)'
 
-  const [showCollected, setShowCollected] = useState(false)
-
   const onToggleShowCollected = () => setShowCollected((prev) => !prev)
-
-  const transactionsList = transactions.filter(
-    (t) => showCollected || !t.collected,
-  )
 
   const paymentPrefix = () => {
     switch (type) {
@@ -81,6 +102,10 @@ export const TransactionsTable = (props: Props) => {
       default:
         return 'Remboursement attendu le'
     }
+  }
+
+  const onUpdateSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value)
   }
 
   const toggleCollected = (transaction: Transaction) => () => {
@@ -100,6 +125,28 @@ export const TransactionsTable = (props: Props) => {
         transactionEdition,
       })
     }
+
+  const onNext = () => setPage((prev) => prev + 1)
+  const onPrevious = () => setPage((prev) => prev - 1)
+  const goToPage = (page: number) => () => setPage(page)
+
+  const nextPages = () => {
+    if (transactionData) {
+      const currentPage = transactionData.meta.currentPage
+      const lastPage = transactionData.meta.lastPage
+      return Array.from(
+        { length: lastPage - currentPage + 1 },
+        (_, i) => currentPage + i,
+      )
+        .slice(1, 4)
+        .filter((page) => page !== transactionData.meta.lastPage)
+    }
+
+    return []
+  }
+
+  const updateSort = () =>
+    setOrderByDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))
 
   const renderTransactionActions = (transaction: Transaction) => {
     if (!transactionActions) {
@@ -157,8 +204,8 @@ export const TransactionsTable = (props: Props) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-between">
-        <div className="flex items-center space-x-2">
+      <div className="flex justify-around gap-4">
+        <div className="flex flex-1 items-center space-x-2">
           <Switch
             id="show-collected"
             checked={showCollected}
@@ -169,6 +216,10 @@ export const TransactionsTable = (props: Props) => {
           </Label>
         </div>
 
+        <div className="hidden sm:flex flex-1">
+          <Input placeholder="Recherche par nom..." onChange={onUpdateSearch} />
+        </div>
+
         {transactionActions && (
           <TransactionFormActions
             submitHandler={transactionActions.add.mutateAsync}
@@ -177,11 +228,29 @@ export const TransactionsTable = (props: Props) => {
           />
         )}
       </div>
-
+      <div className="flex sm:hidden flex-1">
+        <Input placeholder="Recherche par nom..." onChange={onUpdateSearch} />
+      </div>
       <Table className="hidden md:table">
         <TableHeader>
           <TableRow>
-            <TableHead>Date</TableHead>
+            <TableHead
+              className="flex items-center cursor-pointer"
+              onClick={updateSort}
+            >
+              <Button
+                size="icon-sm"
+                variant="ghost"
+                className="flex items-center gap-2"
+              >
+                {orderByDirection === 'asc' ? (
+                  <SortAsc size={17} />
+                ) : (
+                  <SortDesc size={17} />
+                )}
+                Date
+              </Button>
+            </TableHead>
             <TableHead>Nom</TableHead>
             <TableHead>Prix</TableHead>
             <TableHead>Catégorie</TableHead>
@@ -218,13 +287,13 @@ export const TransactionsTable = (props: Props) => {
                 </React.Fragment>
               ))}
           {!loading &&
-            transactionsList.map((transaction) => (
+            transactions.map((transaction) => (
               <TableRow key={transaction.id}>
                 <TableCell>{transaction.day}</TableCell>
                 <TableCell>{transaction.name}</TableCell>
                 <TableCell>{transaction.amount} €</TableCell>
                 <TableCell>
-                  <Badge>Mettre nom de la catégorie ici</Badge>
+                  <Badge>{transaction.category.name}</Badge>
                 </TableCell>
                 <TableCell>
                   {transaction.collected ? (
@@ -293,7 +362,67 @@ export const TransactionsTable = (props: Props) => {
             ))}
         </TableBody>
       </Table>
-
+      {transactionData && (
+        <div className="hidden md:flex">
+          <Pagination className="justify-between">
+            <PaginationContent className="flex-1 flex justify-end">
+              <PaginationItem>
+                <PaginationPrevious
+                  disabled={page === 1}
+                  onClick={onPrevious}
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink isActive={page === 1} onClick={goToPage(1)}>
+                  1
+                </PaginationLink>
+              </PaginationItem>
+              {page >= 3 && <PaginationEllipsis />}
+              {transactionData.meta.currentPage !== 1 &&
+                page !== transactionData.meta.lastPage && (
+                  <PaginationItem>
+                    <PaginationLink
+                      isActive={page === transactionData.meta.currentPage}
+                      onClick={goToPage(transactionData.meta.currentPage)}
+                    >
+                      {transactionData.meta.currentPage}
+                    </PaginationLink>
+                  </PaginationItem>
+                )}
+              {nextPages()
+                .filter((p) => p !== page)
+                .map((page) => (
+                  <PaginationItem key={page}>
+                    <PaginationLink
+                      isActive={page === transactionData.meta.currentPage}
+                      onClick={goToPage(page)}
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+              {nextPages()[nextPages().length - 1] <
+                transactionData.meta.lastPage - 1 && <PaginationEllipsis />}
+              {transactionData.meta.lastPage > 1 && (
+                <PaginationItem>
+                  <PaginationLink
+                    isActive={page === transactionData.meta.lastPage}
+                    onClick={goToPage(transactionData.meta.lastPage)}
+                  >
+                    {transactionData.meta.lastPage}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              <PaginationItem>
+                <PaginationNext
+                  disabled={page >= transactionData.meta.lastPage}
+                  onClick={onNext}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
       <div className="flex flex-col gap-2 md:hidden">
         {loading &&
           Array(10)
@@ -335,12 +464,12 @@ export const TransactionsTable = (props: Props) => {
             ))}
 
         {!loading &&
-          transactionsList.map((transaction) => (
+          transactions.map((transaction) => (
             <Card key={transaction.id}>
               <CardHeader>
                 <div className="flex items-baseline gap-2">
                   <CardTitle className="flex-1">{transaction.name}</CardTitle>
-                  <Badge>METTRE CATEGORY NAME ICI</Badge>
+                  <Badge>{transaction.category.name}</Badge>
                 </div>
               </CardHeader>
               <CardContent className="flex text-base flex-col gap-2">
@@ -369,6 +498,35 @@ export const TransactionsTable = (props: Props) => {
               <CardFooter>{renderTransactionActions(transaction)}</CardFooter>
             </Card>
           ))}
+        {transactionData && (
+          <div className="flex md:hidden">
+            <Pagination className="justify-between">
+              <PaginationContent className="flex-1 flex justify-between">
+                <PaginationItem>
+                  <PaginationPrevious
+                    disabled={page === 1}
+                    onClick={onPrevious}
+                  >
+                    Précédent
+                  </PaginationPrevious>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationLink disabled isActive>
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationNext
+                    disabled={page >= transactionData.meta.lastPage}
+                    onClick={onNext}
+                  >
+                    Suivant
+                  </PaginationNext>
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        )}
       </div>
     </div>
   )
