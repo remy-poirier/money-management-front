@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { Transaction, TransactionForm } from '@/domain/transaction.ts'
 import { common } from '@/conf/common.ts'
+import { toast } from 'sonner'
 
 const addTransactionFn = async (
   transactionCreation: TransactionForm,
@@ -118,6 +119,9 @@ export const useTransactionActions = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
       queryClient.invalidateQueries({ queryKey: ['account'] })
+      toast.success(`Félicitations`, {
+        description: `Action effectuée avec succès`,
+      })
     },
   })
 
