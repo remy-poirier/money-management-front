@@ -212,10 +212,10 @@ function App() {
           </div>
         </div>
       </header>
-      <div className="relative flex min-h-screen flex-col bg-background">
-        <main className="flex-1">
-          <div className="container relative max-w-screen-2xl">
-            <section className="py-2">
+      <div className="relative flex flex-1 flex-col bg-background">
+        <main className="flex flex-col flex-1">
+          <div className="container relative max-w-screen-2xl flex-1 flex flex-col">
+            <section className="flex flex-col flex-1 py-2">
               <Outlet />
             </section>
           </div>

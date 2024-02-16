@@ -6,6 +6,16 @@ export interface User {
   balance: number
   isAdmin: boolean
 
+  isOnboarded: boolean
+  onboardingStatus: OnboardingStatus
+
   createdAt: Date
   updatedAt: Date
+}
+
+export enum OnboardingStatus {
+  WELCOME = 'WELCOME',
+  AMOUNT_ON_ACCOUNT = 'AMOUNT_ON_ACCOUNT',
+  RECURRING = 'RECURRING',
+  ONBOARDED = 'ONBOARDED',
 }

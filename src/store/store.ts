@@ -1,9 +1,13 @@
 import { create } from 'zustand'
-import { User } from '@/domain/user.ts'
+import { OnboardingStatus, User } from '@/domain/user.ts'
 
 interface UserStore {
   user?: User
   updateBalance: (newBalance: number) => void
+  setOnboardingStatus: (data: {
+    status: OnboardingStatus
+    isOnboarded: boolean
+  }) => void
   setUser: (user: User) => void
   signOut: () => void
 }
@@ -20,6 +24,24 @@ export const useUserStore = create<UserStore>()((set) => ({
         user: {
           ...state.user,
           balance: newBalance,
+        },
+      }
+    }),
+  setOnboardingStatus: (data: {
+    status: OnboardingStatus
+    isOnboarded: boolean
+  }) =>
+    set((state) => {
+      console.log('ok les data => ', data)
+      if (!state.user) {
+        return state
+      }
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          onboardingStatus: data.status,
+          isOnboarded: data.isOnboarded,
         },
       }
     }),

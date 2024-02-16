@@ -14,6 +14,7 @@ import { Users } from '@/pages/admin/users/users.tsx'
 import { Dashboard } from '@/pages/dashboard/dashboard.tsx'
 import { Transactions } from '@/pages/transactions/transactions.tsx'
 import { LoggedRoute } from '@/conf/logged-route.tsx'
+import { Onboarding } from '@/pages/user/onboarding.tsx'
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
         element: <LoggedRoute />,
         errorElement: <ErrorPage />,
         children: [
+          {
+            path: 'onboarding',
+            element: <Onboarding />,
+          },
           {
             path: 'dashboard',
             element: <Dashboard />,

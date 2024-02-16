@@ -37,3 +37,5 @@ export interface TransactionSearch {
   search?: string
   orderByDirection: 'asc' | 'desc'
 }
+
+export type OnboardingTransaction = Pick<Transaction, 'name' | 'day' | 'amount'>
