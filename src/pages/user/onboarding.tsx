@@ -73,9 +73,6 @@ export const Onboarding = () => {
     <div className="flex flex-col flex-1 items-center justify-center content-center">
       <Card className="max-w-3xl pt-4">
         <CardContent className="flex flex-col gap-6">
-          <pre>Balance: {JSON.stringify(user.balance)}</pre>
-          <pre>Statut: {JSON.stringify(user.onboardingStatus)}</pre>
-          <pre>Statut local: {JSON.stringify(onboardingStep)}</pre>
           <ul className="flex justify-center steps">
             <li
               className={cn(
