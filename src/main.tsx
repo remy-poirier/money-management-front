@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
 import { ThemeProvider } from '@/components/theme-provider.tsx'
 import App from '@/App.tsx'
 import { Signup } from '@/pages/session/signup/signup.tsx'
@@ -16,7 +16,7 @@ import { Transactions } from '@/pages/transactions/transactions.tsx'
 import { LoggedRoute } from '@/conf/logged-route.tsx'
 import { Onboarding } from '@/pages/user/onboarding.tsx'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <App />,

@@ -6,6 +6,8 @@ This is the front-end application responsible of the money management product.
 
 - Vite JS
 - React 
+- Zustand
+- React-query
 - Typescript
-- Heroku for deployment
-- Shadcn for ui
+- Github pages for deployment -> This requires to use HashRouter instead of BrowserRouter due to how GithubPages works
+- Shadcn for ui, a little of daisy-ui also
