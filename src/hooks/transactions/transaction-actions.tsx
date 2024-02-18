@@ -120,7 +120,7 @@ export const useTransactionActions = () => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
       queryClient.invalidateQueries({ queryKey: ['account'] })
       toast.success(`Félicitations`, {
-        description: `Action effectuée avec succès`,
+        description: `Statut de la transaction mis à jour avec succès`,
       })
     },
   })
@@ -130,6 +130,9 @@ export const useTransactionActions = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
       queryClient.invalidateQueries({ queryKey: ['account'] })
+      toast.success(`Félicitations`, {
+        description: `Transaction archivée avec succès`,
+      })
     },
   })
 
@@ -137,6 +140,10 @@ export const useTransactionActions = () => {
     mutationFn: updateTransactionFn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['transactions'] })
+      queryClient.invalidateQueries({ queryKey: ['account'] })
+      toast.success(`Félicitations`, {
+        description: `Transaction mise à jour avec succès`,
+      })
     },
   })
 

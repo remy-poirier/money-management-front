@@ -128,6 +128,34 @@ function App() {
                             </li>
                           </>
                         )}
+                        <li>
+                          <Button
+                            className="w-full"
+                            variant="outline"
+                            onClick={logout}
+                          >
+                            Déconnexion
+                          </Button>
+                        </li>
+                      </>
+                    )}
+
+                    {!user && (
+                      <>
+                        <li>
+                          <Link to="/signup">
+                            <Button className="w-full" variant="outline">
+                              Inscription
+                            </Button>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/login">
+                            <Button className="w-full" variant="outline">
+                              Connexion
+                            </Button>
+                          </Link>
+                        </li>
                       </>
                     )}
                   </ul>

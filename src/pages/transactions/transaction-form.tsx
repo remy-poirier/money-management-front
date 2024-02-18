@@ -22,7 +22,6 @@ import { Input } from '@/components/ui/input.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import { Switch } from '@/components/ui/switch.tsx'
 import { Badge } from '@/components/ui/badge.tsx'
-import { toast } from 'sonner'
 import { Category } from '@/domain/category.ts'
 import {
   Transaction,
@@ -81,7 +80,6 @@ export const TransactionForm = ({
       if (e.key === 'Enter') {
         e.preventDefault()
         form.handleSubmit(onSubmit)()
-        console.log('You pressed Enter')
       }
     }
 
@@ -130,6 +128,7 @@ export const TransactionForm = ({
   }
 
   const onSubmit = async (values: z.infer<typeof expenseSchema>) => {
+    console.log('in on sibmut')
     setLoading(true)
     submitHandler({
       ...expense,
@@ -138,9 +137,6 @@ export const TransactionForm = ({
     })
       .then(() => {
         form.reset()
-        toast.success('Félicitations', {
-          description: `Opération effectuée avec succès`,
-        })
         onClose()
         invalidateQueries()
       })
@@ -248,7 +244,12 @@ export const TransactionForm = ({
             </div>
 
             <DialogFooter className="gap-2">
-              <Button disabled={loading} onClick={onClose} variant="outline">
+              <Button
+                type="button"
+                disabled={loading}
+                onClick={onClose}
+                variant="outline"
+              >
                 Annuler
               </Button>
               <Button
