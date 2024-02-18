@@ -67,16 +67,16 @@ export const TransactionItemMobile = ({
     <>
       <div
         {...handler}
-        className="relative flex overflow-x-hidden bg-slate-100 dark:bg-slate-900 items-center"
+        className="relative flex overflow-x-hidden bg-slate-100 dark:bg-slate-900 rounded-md items-center"
       >
         <div
           className={cn(
             'flex gap-4 ml-0 px-3 py-2 items-center w-full transition-all',
-            showActions && `ml-[-96px]`,
+            showActions && `ml-[-112px]`,
             showActions &&
               !transaction.collected &&
               !transaction.archived &&
-              'ml-[-144px]',
+              'ml-[-168px]',
           )}
           onClick={() => setShowActions(false)}
         >
@@ -107,17 +107,17 @@ export const TransactionItemMobile = ({
           className={cn(
             'absolute top-0 bottom-0 flex items-center transition-all',
             showActions ? 'right-0' : '',
-            !showActions && `right-[-96px]`,
+            !showActions && `right-[-112px]`,
             !showActions &&
               !transaction.collected &&
               !transaction.archived &&
-              `right-[-144px]`,
+              `right-[-168px]`,
           )}
         >
           <div
             onClick={transactionActionsBag.toggleCollected.toggle}
             className={cn(
-              'h-full flex px-4 items-center',
+              'h-full flex px-5 items-center',
               transaction.collected ? 'bg-blue-500' : 'bg-green-500',
             )}
           >
@@ -130,7 +130,7 @@ export const TransactionItemMobile = ({
           {!transaction.archived && !transaction.collected && (
             <div
               onClick={transactionActionsBag.edit.toggle}
-              className="h-full flex px-4 items-center bg-orange-400"
+              className="h-full flex px-5 items-center bg-orange-400"
             >
               <SquarePen size={16} className="text-white" />
             </div>
@@ -138,7 +138,7 @@ export const TransactionItemMobile = ({
 
           <div
             onClick={transactionActionsBag.archive.toggle}
-            className="h-full flex px-4 items-center bg-red-500"
+            className="h-full flex px-5 items-center bg-red-500"
           >
             <Trash2 size={16} className="text-white" />
           </div>

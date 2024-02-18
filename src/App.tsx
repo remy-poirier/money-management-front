@@ -242,7 +242,7 @@ function App() {
       </header>
       <div className="relative flex flex-1 flex-col bg-background">
         <main className="flex flex-col flex-1">
-          <div className="container relative max-w-screen-2xl flex-1 flex flex-col">
+          <div className="container px-4 md:px-8 relative max-w-screen-2xl flex-1 flex flex-col">
             <section className="flex flex-col flex-1 py-2">
               <Outlet />
             </section>
