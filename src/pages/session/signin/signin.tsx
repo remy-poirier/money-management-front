@@ -53,7 +53,10 @@ export const Signin = () => {
   }
 
   const onSubmit = async (values: z.infer<typeof signupSchema>) => {
-    signin({ email: values.email, password: values.password }).then((user) => {
+    signin({
+      email: values.email.toLowerCase(),
+      password: values.password,
+    }).then((user) => {
       setUser(user)
       toast.success('Connexion réussie', {
         description: "Redirection vers la page d'accueil",
