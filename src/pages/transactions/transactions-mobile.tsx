@@ -2,6 +2,7 @@ import { Transaction } from '@/domain/transaction.ts'
 import { TransactionItem } from '@/pages/transactions/transaction-item.tsx'
 import groupBy from 'lodash/groupBy'
 import { Category } from '@/domain/category.ts'
+import { Ban } from 'lucide-react'
 
 interface Props {
   loading: boolean
@@ -25,6 +26,15 @@ export const TransactionsMobile = ({
           transaction={undefined}
         />
       ))
+  }
+
+  if (!loading && transactions.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
+        <Ban />
+        <div className="text-sm">Aucune transaction à afficher</div>
+      </div>
+    )
   }
 
   const groupedTransactions: Record<string, Transaction[]> = groupBy(

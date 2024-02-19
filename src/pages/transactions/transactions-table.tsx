@@ -12,7 +12,7 @@ import { Switch } from '@/components/ui/switch.tsx'
 import { TransactionType } from '@/domain/transaction.ts'
 import { Category } from '@/domain/category'
 import { useTransactionActions } from '@/hooks/transactions/transaction-actions.tsx'
-import { Plus, SortAsc, SortDesc } from 'lucide-react'
+import { Ban, Plus, SortAsc, SortDesc } from 'lucide-react'
 import { useGetTransactions } from '@/hooks/transactions/get-transactions.tsx'
 import {
   Pagination,
@@ -172,6 +172,17 @@ export const TransactionsTable = (props: Props) => {
                     transaction={transaction}
                   />
                 ))}
+
+              {!loading && transactions.length === 0 && (
+                <TableRow>
+                  <td colSpan={6} className="text-center">
+                    <div className="flex flex-col items-center pt-4 text-muted-foreground gap-2">
+                      <Ban />
+                      Aucune transaction à afficher
+                    </div>
+                  </td>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
           {transactionData && (

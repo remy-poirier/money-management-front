@@ -99,7 +99,9 @@ const PaginationPrevious = ({
     size="default"
     className={cn(
       'gap-1 pl-2.5',
-      disabled ? 'cursor-not-allowed hover:bg-transparent' : 'cursor-pointer',
+      disabled
+        ? 'cursor-not-allowed text-muted-foreground hover:bg-transparent hover:text-muted-foreground'
+        : 'cursor-pointer',
       className,
     )}
     {...(!disabled && !!onClick && { onClick })}
@@ -122,7 +124,9 @@ const PaginationNext = ({
     size="default"
     className={cn(
       'gap-1 pr-2.5',
-      disabled ? 'cursor-not-allowed hover:bg-transparent' : 'cursor-pointer',
+      disabled
+        ? 'cursor-not-allowed hover:bg-transparent hover:text-muted-foreground text-muted-foreground'
+        : 'cursor-pointer',
       className,
     )}
     {...(!disabled && !!onClick && { onClick })}
