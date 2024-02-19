@@ -33,7 +33,6 @@ export type TransactionForm = Omit<
 export interface TransactionSearch {
   type: TransactionType
   collected?: boolean
-  page?: number
   search?: string
   orderByDirection: 'asc' | 'desc'
 }

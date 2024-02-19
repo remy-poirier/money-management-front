@@ -9,20 +9,11 @@ import React, { useState } from 'react'
 import { Button } from '@/components/ui/button.tsx'
 import { Label } from '@/components/ui/label.tsx'
 import { Switch } from '@/components/ui/switch.tsx'
-import { TransactionType } from '@/domain/transaction.ts'
+import { Transaction, TransactionType } from '@/domain/transaction.ts'
 import { Category } from '@/domain/category'
 import { useTransactionActions } from '@/hooks/transactions/transaction-actions.tsx'
-import { Ban, Plus, SortAsc, SortDesc } from 'lucide-react'
+import { ArrowDown, Ban, Plus, SortAsc, SortDesc } from 'lucide-react'
 import { useGetTransactions } from '@/hooks/transactions/get-transactions.tsx'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination.tsx'
 import { useDebounce, useMediaQuery } from '@uidotdev/usehooks'
 import { Input } from '@/components/ui/input.tsx'
 import { TransactionItem } from '@/pages/transactions/transaction-item.tsx'
@@ -42,7 +33,6 @@ export const TransactionsTable = (props: Props) => {
   const { type, categories } = props
   const transactionActions = useTransactionActions()
   const [showCollected, setShowCollected] = useState(false)
-  const [page, setPage] = useState(1)
   const [searchText, setSearchText] = useState('')
   const debouncedSearch = useDebounce(searchText, 300)
   const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>(
@@ -57,16 +47,17 @@ export const TransactionsTable = (props: Props) => {
   const toggleAddTransaction = () => setShowAddTransaction((prev) => !prev)
   const closeAddTransaction = () => setShowAddTransaction(false)
 
-  const { transactions: transactionData, isLoading: loading } =
-    useGetTransactions({
-      type,
-      page,
-      collected: showCollected ? undefined : false,
-      search: debouncedSearch,
-      orderByDirection,
-    })
-
-  const transactions = transactionData?.data ?? []
+  const {
+    fetchNextPage,
+    transactions: transactionData,
+    isLoading: loading,
+    hasNextPage,
+  } = useGetTransactions({
+    type,
+    collected: showCollected ? undefined : false,
+    search: debouncedSearch,
+    orderByDirection,
+  })
 
   const onToggleShowCollected = () => setShowCollected((prev) => !prev)
 
@@ -74,27 +65,15 @@ export const TransactionsTable = (props: Props) => {
     setSearchText(e.target.value)
   }
 
-  const onNext = () => setPage((prev) => prev + 1)
-  const onPrevious = () => setPage((prev) => prev - 1)
-  const goToPage = (page: number) => () => setPage(page)
-
-  const nextPages = () => {
-    if (transactionData) {
-      const currentPage = transactionData.meta.currentPage
-      const lastPage = transactionData.meta.lastPage
-      return Array.from(
-        { length: lastPage - currentPage + 1 },
-        (_, i) => currentPage + i,
-      )
-        .slice(1, 4)
-        .filter((page) => page !== transactionData.meta.lastPage)
-    }
-
-    return []
-  }
-
   const updateSort = () =>
     setOrderByDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'))
+
+  const transactions: Transaction[] =
+    transactionData?.pages.reduce((acc, value) => {
+      acc.push(...value.data)
+
+      return acc
+    }, [] as Transaction[]) ?? []
 
   return (
     <div className="flex flex-col gap-4">
@@ -186,64 +165,17 @@ export const TransactionsTable = (props: Props) => {
             </TableBody>
           </Table>
           {transactionData && (
-            <div className="hidden md:flex">
-              <Pagination className="justify-between">
-                <PaginationContent className="flex-1 flex justify-end">
-                  <PaginationItem>
-                    <PaginationPrevious
-                      disabled={page === 1}
-                      onClick={onPrevious}
-                    />
-                  </PaginationItem>
-                  <PaginationItem>
-                    <PaginationLink isActive={page === 1} onClick={goToPage(1)}>
-                      1
-                    </PaginationLink>
-                  </PaginationItem>
-                  {page >= 3 && <PaginationEllipsis />}
-                  {transactionData.meta.currentPage !== 1 &&
-                    page !== transactionData.meta.lastPage && (
-                      <PaginationItem>
-                        <PaginationLink
-                          isActive={page === transactionData.meta.currentPage}
-                          onClick={goToPage(transactionData.meta.currentPage)}
-                        >
-                          {transactionData.meta.currentPage}
-                        </PaginationLink>
-                      </PaginationItem>
-                    )}
-                  {nextPages()
-                    .filter((p) => p !== page)
-                    .map((page) => (
-                      <PaginationItem key={page}>
-                        <PaginationLink
-                          isActive={page === transactionData.meta.currentPage}
-                          onClick={goToPage(page)}
-                        >
-                          {page}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))}
-                  {nextPages()[nextPages().length - 1] <
-                    transactionData.meta.lastPage - 1 && <PaginationEllipsis />}
-                  {transactionData.meta.lastPage > 1 && (
-                    <PaginationItem>
-                      <PaginationLink
-                        isActive={page === transactionData.meta.lastPage}
-                        onClick={goToPage(transactionData.meta.lastPage)}
-                      >
-                        {transactionData.meta.lastPage}
-                      </PaginationLink>
-                    </PaginationItem>
-                  )}
-                  <PaginationItem>
-                    <PaginationNext
-                      disabled={page >= transactionData.meta.lastPage}
-                      onClick={onNext}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
+            <div className="hidden md:flex justify-center mt-2">
+              <Button onClick={() => fetchNextPage()} disabled={!hasNextPage}>
+                {hasNextPage && (
+                  <>
+                    <ArrowDown size={20} className="mr-2" />
+                    Charger + de transactions
+                  </>
+                )}
+                {!hasNextPage &&
+                  '🎉 Vous avez visualisé toutes les transactions'}
+              </Button>
             </div>
           )}
         </>
@@ -256,36 +188,16 @@ export const TransactionsTable = (props: Props) => {
             loading={loading}
             transactions={transactions}
           />
-          <div className="flex md:hidden">
-            <Pagination className="justify-between">
-              <PaginationContent className="flex-1 flex justify-between">
-                <PaginationItem>
-                  <PaginationPrevious
-                    disabled={page === 1}
-                    onClick={onPrevious}
-                  >
-                    Précédent
-                  </PaginationPrevious>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink disabled isActive>
-                    {page}
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext
-                    disabled={
-                      transactionData
-                        ? page >= transactionData?.meta?.lastPage
-                        : true
-                    }
-                    onClick={onNext}
-                  >
-                    Suivant
-                  </PaginationNext>
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
+          <div className="flex md:hidden justify-center">
+            <Button onClick={() => fetchNextPage()} disabled={!hasNextPage}>
+              {hasNextPage && (
+                <>
+                  <ArrowDown size={20} className="mr-2" />
+                  Charger + de transactions
+                </>
+              )}
+              {!hasNextPage && '🎉 Vous avez visualisé toutes les transactions'}
+            </Button>
           </div>
         </>
       )}
