@@ -75,6 +75,8 @@ export const TransactionsTable = (props: Props) => {
       return acc
     }, [] as Transaction[]) ?? []
 
+  const lastPage = transactionData?.pages[0].meta.lastPage ?? 1
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-around gap-4">
@@ -164,7 +166,7 @@ export const TransactionsTable = (props: Props) => {
               )}
             </TableBody>
           </Table>
-          {transactionData && (
+          {transactionData && lastPage > 1 && (
             <div className="hidden md:flex justify-center mt-2">
               <Button onClick={() => fetchNextPage()} disabled={!hasNextPage}>
                 {hasNextPage && (
@@ -188,17 +190,20 @@ export const TransactionsTable = (props: Props) => {
             loading={loading}
             transactions={transactions}
           />
-          <div className="flex md:hidden justify-center">
-            <Button onClick={() => fetchNextPage()} disabled={!hasNextPage}>
-              {hasNextPage && (
-                <>
-                  <ArrowDown size={20} className="mr-2" />
-                  Charger + de transactions
-                </>
-              )}
-              {!hasNextPage && '🎉 Vous avez visualisé toutes les transactions'}
-            </Button>
-          </div>
+          {lastPage > 1 && (
+            <div className="flex md:hidden justify-center">
+              <Button onClick={() => fetchNextPage()} disabled={!hasNextPage}>
+                {hasNextPage && (
+                  <>
+                    <ArrowDown size={20} className="mr-2" />
+                    Charger + de transactions
+                  </>
+                )}
+                {!hasNextPage &&
+                  '🎉 Vous avez visualisé toutes les transactions'}
+              </Button>
+            </div>
+          )}
         </>
       )}
       <TransactionForm
