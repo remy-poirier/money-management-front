@@ -110,6 +110,7 @@ export const Signup = () => {
                         type={showPassword ? 'text' : 'password'}
                         endIcon={
                           <Button
+                            type="button"
                             variant="ghost"
                             size="icon-sm"
                             onClick={toggleShowPassword}
