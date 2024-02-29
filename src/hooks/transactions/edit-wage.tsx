@@ -2,13 +2,18 @@ import { common } from '@/conf/common.ts'
 import { useMutation } from 'react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
+import { getTokenOrFail } from '@/lib/utils.ts'
 
 const editWageFn = async (amount: number): Promise<number> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/transactions/wage`, {
     method: 'POST',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ amount }),
   })

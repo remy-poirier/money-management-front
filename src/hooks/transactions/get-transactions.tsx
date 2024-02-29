@@ -4,10 +4,14 @@ import { useInfiniteQuery } from 'react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Transaction, TransactionSearch } from '@/domain/transaction.ts'
+import { getTokenOrFail } from '@/lib/utils.ts'
 
 const getTransactionsFn =
   (transactionSearch: TransactionSearch) =>
   async ({ pageParam = 1 }): Promise<Paginate<Transaction>> => {
+    const token = getTokenOrFail()
+    if (!token) return Promise.reject('No token found')
+
     // Create url with query params
     const url = new URL(`${common.apiUrl}/transactions`)
 
@@ -22,6 +26,9 @@ const getTransactionsFn =
     return fetch(url, {
       method: 'GET',
       credentials: 'include',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => {
         if (!res.ok) {

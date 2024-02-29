@@ -3,6 +3,12 @@ import { User } from '@/domain/user.ts'
 import { common } from '@/conf/common.ts'
 import { toast } from 'sonner'
 import { useEffect } from 'react'
+import { Token } from '@/domain/auth.ts'
+
+export interface AuthResponse {
+  user: User
+  token: Token
+}
 
 const signupFn = ({
   email,
@@ -23,7 +29,10 @@ const signupFn = ({
       if (!res.ok) {
         return Promise.reject(res)
       }
-      return res.json()
+      return res.json().then((response: AuthResponse) => {
+        localStorage.setItem('mmtoken', JSON.stringify(response.token))
+        return Promise.resolve(response.user)
+      })
     })
     .catch((error) => {
       return Promise.reject(

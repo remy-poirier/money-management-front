@@ -2,15 +2,20 @@ import { useMutation, useQueryClient } from 'react-query'
 import { Transaction, TransactionForm } from '@/domain/transaction.ts'
 import { common } from '@/conf/common.ts'
 import { toast } from 'sonner'
+import { getTokenOrFail } from '@/lib/utils.ts'
 
 const addTransactionFn = async (
   transactionCreation: TransactionForm,
 ): Promise<Transaction> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/transactions`, {
     method: 'PUT',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(transactionCreation),
   })
@@ -35,11 +40,15 @@ const updateTransactionFn = async ({
   id: string
   transactionEdition: TransactionForm
 }): Promise<Transaction> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/transactions`, {
     method: 'POST',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id,
@@ -63,11 +72,15 @@ const updateTransactionFn = async ({
 const toggleCollectedTransactionFn = async (
   id: string,
 ): Promise<Transaction> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/transactions/toggle-collected`, {
     method: 'POST',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ id }),
   })
@@ -86,11 +99,15 @@ const toggleCollectedTransactionFn = async (
 }
 
 const deleteTransactionFn = async (id: string): Promise<void> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/transactions/archive`, {
     method: 'POST',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ id }),
   })

@@ -2,11 +2,18 @@ import { common } from '@/conf/common.ts'
 import { useQuery } from 'react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
+import { getTokenOrFail } from '@/lib/utils.ts'
 
 const getLastWageFn = async (): Promise<number> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/transactions/wage`, {
     method: 'GET',
     credentials: 'include',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((res) => {
       if (!res.ok) {

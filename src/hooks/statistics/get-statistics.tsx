@@ -3,11 +3,18 @@ import { useQuery } from 'react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Statistics } from '@/domain/statistics.ts'
+import { getTokenOrFail } from '@/lib/utils.ts'
 
 const getStatisticsFn = async (): Promise<Statistics> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/statistics`, {
     method: 'GET',
     credentials: 'include',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((res) => {
       if (!res.ok) {

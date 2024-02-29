@@ -2,6 +2,7 @@ import { common } from '@/conf/common.ts'
 import { useQuery } from 'react-query'
 import { useUserStore } from '@/store/store.ts'
 import { User } from '@/domain/user.ts'
+import { getTokenOrFail } from '@/lib/utils.ts'
 
 type AuthSuccessResponse = {
   state: 'authenticated'
@@ -15,9 +16,15 @@ type AuthErrorResponse = {
 type AuthResponse = AuthSuccessResponse | AuthErrorResponse
 
 const authStatusFn = (): Promise<AuthResponse> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/auth`, {
     method: 'GET',
     credentials: 'include',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((res) => {
       if (!res.ok) {

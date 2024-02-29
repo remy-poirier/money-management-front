@@ -1,19 +1,25 @@
 import { common } from '@/conf/common.ts'
 import { useMutation } from 'react-query'
 import { useUserStore } from '@/store/store.ts'
+import { getTokenOrFail } from '@/lib/utils.ts'
 
 const signoutFn = (): Promise<string> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/signout`, {
     method: 'POST',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   })
     .then((res) => {
       if (!res.ok) {
         return Promise.reject(res)
       }
+      localStorage.removeItem('mmtoken')
       return res.json()
     })
     .catch((error) => {

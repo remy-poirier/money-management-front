@@ -3,11 +3,18 @@ import { useQuery } from 'react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Category } from '@/domain/category.ts'
+import { getTokenOrFail } from '@/lib/utils.ts'
 
 const getCategoriesFn = async (): Promise<Category[]> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/categories`, {
     method: 'GET',
     credentials: 'include',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((res) => {
       if (!res.ok) {

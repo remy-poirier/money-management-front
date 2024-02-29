@@ -4,11 +4,18 @@ import { toast } from 'sonner'
 import { useEffect } from 'react'
 import { Paginate } from '@/domain/paginate.ts'
 import { User } from '@/domain/user.ts'
+import { getTokenOrFail } from '@/lib/utils.ts'
 
 const getUsersFn = async (): Promise<Paginate<User>> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/admin/users`, {
     method: 'GET',
     credentials: 'include',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((res) => {
       if (!res.ok) {
