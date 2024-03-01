@@ -3,6 +3,7 @@ import { useMutation } from 'react-query'
 import { useUserStore } from '@/store/store.ts'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
+import { getTokenOrFail } from '@/lib/utils.ts'
 
 interface UpdateOnboardingBalanceProps {
   balance: number
@@ -11,11 +12,15 @@ interface UpdateOnboardingBalanceProps {
 const updateOnboardingBalance = async (
   data: UpdateOnboardingBalanceProps,
 ): Promise<UpdateOnboardingBalanceProps> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/onboarding/balance`, {
     method: 'POST',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   })

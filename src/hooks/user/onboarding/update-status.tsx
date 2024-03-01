@@ -4,6 +4,7 @@ import { useMutation } from 'react-query'
 import { useUserStore } from '@/store/store.ts'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
+import { getTokenOrFail } from '@/lib/utils.ts'
 
 interface UpdateOnboardingStatusProps {
   onboardingStatus: OnboardingStatus
@@ -13,11 +14,15 @@ interface UpdateOnboardingStatusProps {
 const updateOnboardingStatus = async (
   data: Pick<UpdateOnboardingStatusProps, 'onboardingStatus'>,
 ): Promise<UpdateOnboardingStatusProps> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/onboarding/update`, {
     method: 'POST',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   })
@@ -41,7 +46,6 @@ export const useUpdateOnboardingStatus = () => {
     mutationFn: async (
       data: Pick<UpdateOnboardingStatusProps, 'onboardingStatus'>,
     ) => {
-      console.log('ok update status')
       updateOnboardingStatus(data).then((status) => {
         setOnboardingStatus({
           status: status.onboardingStatus,

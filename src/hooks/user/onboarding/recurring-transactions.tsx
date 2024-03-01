@@ -2,6 +2,7 @@ import { useMutation } from 'react-query'
 import { common } from '@/conf/common.ts'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
+import { getTokenOrFail } from '@/lib/utils.ts'
 
 interface RecurringTransactionsProps {
   transactions: {
@@ -14,11 +15,15 @@ interface RecurringTransactionsProps {
 const addRecurringTransactions = async (
   data: RecurringTransactionsProps,
 ): Promise<void> => {
+  const token = getTokenOrFail()
+  if (!token) return Promise.reject('No token found')
+
   return fetch(`${common.apiUrl}/onboarding/transactions`, {
     method: 'POST',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   })
