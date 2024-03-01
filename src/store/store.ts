@@ -32,7 +32,6 @@ export const useUserStore = create<UserStore>()((set) => ({
     isOnboarded: boolean
   }) =>
     set((state) => {
-      console.log('ok les data => ', data)
       if (!state.user) {
         return state
       }
