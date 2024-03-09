@@ -18,19 +18,24 @@ import tailwindConfig from '../../../tailwind.config'
 
 interface Props {
   categoryId: string
+  forceSmall?: boolean
 }
 
 const fullConfig = resolveConfig(tailwindConfig)
 
-export const TransactionCategory = ({ categoryId }: Props) => {
+export const TransactionCategory = ({
+  categoryId,
+  forceSmall = false,
+}: Props) => {
   const isSmallDevice = useMediaQuery(
     `only screen and (max-width : ${fullConfig.theme.screens.md})`,
   )
 
   const size = isSmallDevice ? 20 : 12
-  const defaultClass = isSmallDevice
-    ? 'btn-circle h-[40px] w-[40px] bg-gray-300 flex items-center justify-center'
-    : 'rounded-3xl ml-[-2px] h-[25px] w-[25px] bg-gray-300 flex items-center justify-center'
+  const defaultClass =
+    isSmallDevice || forceSmall
+      ? 'btn-circle h-[40px] w-[40px] bg-gray-300 flex items-center justify-center'
+      : 'rounded-3xl ml-[-2px] h-[25px] w-[25px] bg-gray-300 flex items-center justify-center'
 
   if (categoryId === '850b6d2c-cc0f-11ee-9def-325096b39f47') {
     return (
