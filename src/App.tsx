@@ -29,6 +29,7 @@ import { CommandPanel } from '@/components/command-panel.tsx'
 import { CreateTransactionShortcut } from '@/components/create-transaction-shortcut.tsx'
 import { TransactionType } from '@/domain/transaction.ts'
 import { useGetCategories } from '@/hooks/categories/get-categories.tsx'
+import { ToggleTransactionsPanel } from '@/components/toggle-transactions-panel.tsx'
 
 function App() {
   const user = useUserStore((state) => state.user)
@@ -49,6 +50,8 @@ function App() {
   const navigate = useNavigate()
 
   const [showCommandPanel, setShowCommandPanel] = useState<boolean>(false)
+  const [showToggleTransactionsPanel, setShowToggleTransactionsPanel] =
+    useState<boolean>(false)
   const [showCreateTransactionShortcut, setShowCreateTransactionShortcut] =
     useState<boolean>(false)
   const [createTransactionMode, setCreateTransactionMode] = useState<
@@ -56,6 +59,8 @@ function App() {
   >(undefined)
 
   const closeCommandPanel = () => setShowCommandPanel(false)
+  const toggleShowTransactionsPanel = () =>
+    setShowToggleTransactionsPanel(!showToggleTransactionsPanel)
   const toggleCommandPanel = () => setShowCommandPanel(!showCommandPanel)
   const toggleShowCreateTransaction = () =>
     setShowCreateTransactionShortcut(!showCreateTransactionShortcut)
@@ -114,6 +119,21 @@ function App() {
         ) {
           setLastKey(null)
           navigate('/app/transactions')
+        } else {
+          setLastKey({ key: e.key, time: Date.now() })
+        }
+      }
+
+      if (e.key === 't' || e.key === 'c') {
+        if (
+          lastKey &&
+          e.key === 'c' &&
+          lastKey.key === 't' &&
+          Date.now() - lastKey.time < 2000
+        ) {
+          e.preventDefault()
+          setLastKey(null)
+          setShowToggleTransactionsPanel(true)
         } else {
           setLastKey({ key: e.key, time: Date.now() })
         }
@@ -371,6 +391,7 @@ function App() {
         showCreateTransaction={showCreateTransaction}
         open={showCommandPanel}
         onOpenChange={closeCommandPanel}
+        showToggleTransactionsPanel={toggleShowTransactionsPanel}
       />
       <CreateTransactionShortcut
         open={showCreateTransactionShortcut}
@@ -378,6 +399,12 @@ function App() {
         mode={createTransactionMode}
         onClose={closeShowCreateTransaction}
       />
+      {showToggleTransactionsPanel && (
+        <ToggleTransactionsPanel
+          open={showToggleTransactionsPanel}
+          onOpenChange={toggleShowTransactionsPanel}
+        />
+      )}
     </div>
   )
 }

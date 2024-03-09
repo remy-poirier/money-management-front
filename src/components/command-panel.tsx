@@ -11,6 +11,7 @@ import {
   ArrowLeftRight,
   CalendarCheck,
   CreditCard,
+  Handshake,
   Home,
   PiggyBank,
   TrendingUp,
@@ -24,12 +25,14 @@ interface Props {
   open: boolean
   onOpenChange: () => void
   showCreateTransaction: (mode: TransactionType) => void
+  showToggleTransactionsPanel: () => void
 }
 
 export const CommandPanel = ({
   open,
   onOpenChange,
   showCreateTransaction,
+  showToggleTransactionsPanel,
 }: Props) => {
   const navigate = useNavigate()
   const setEnableShortcuts = useUserStore((state) => state.setEnableShortcuts)
@@ -86,6 +89,11 @@ export const CommandPanel = ({
             <PiggyBank className="mr-2" />
             <span>Ajouter un nouveau remboursement</span>
             <CommandShortcut>⇧ + R</CommandShortcut>
+          </CommandItem>
+          <CommandItem onSelect={showToggleTransactionsPanel}>
+            <Handshake className="mr-2" />
+            <span>Collecter des transactions</span>
+            <CommandShortcut>tc</CommandShortcut>
           </CommandItem>
         </CommandGroup>
         <CommandGroup heading="Navigation">

@@ -90,7 +90,7 @@ export const TransactionForm = ({
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
+      if (open && e.key === 'Enter') {
         e.preventDefault()
         form.handleSubmit(onSubmit)()
       }
@@ -98,7 +98,7 @@ export const TransactionForm = ({
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [])
+  }, [open])
 
   const form = useForm<z.infer<typeof expenseSchema>>({
     resolver: zodResolver(expenseSchema),
