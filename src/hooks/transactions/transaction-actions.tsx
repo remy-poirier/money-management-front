@@ -129,6 +129,11 @@ export const useTransactionActions = () => {
   const queryClient = useQueryClient()
   const addTransactionMutation = useMutation({
     mutationFn: addTransactionFn,
+    onSuccess: () => {
+      toast.success(`Félicitations`, {
+        description: `Transaction ajoutée avec succès`,
+      })
+    },
   })
 
   const toggleCollectedMutation = useMutation({

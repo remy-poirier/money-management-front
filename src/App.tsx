@@ -5,11 +5,11 @@ import { Button } from '@/components/ui/button.tsx'
 import { toast, Toaster } from 'sonner'
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar.tsx'
 import { useSignout } from '@/hooks/session/signout.tsx'
@@ -22,14 +22,25 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet.tsx'
-import { MenuIcon } from 'lucide-react'
+import { Command, MenuIcon } from 'lucide-react'
 import { Separator } from '@/components/ui/separator.tsx'
 import { useEffect, useState } from 'react'
+import { CommandPanel } from '@/components/command-panel.tsx'
+import { CreateTransactionShortcut } from '@/components/create-transaction-shortcut.tsx'
+import { TransactionType } from '@/domain/transaction.ts'
+import { useGetCategories } from '@/hooks/categories/get-categories.tsx'
 
 function App() {
   const user = useUserStore((state) => state.user)
+  const enableShortcut = useUserStore((state) => state.enableShortcuts)
+
+  const { isLoading: isLoadingCategories } = useGetCategories()
 
   const [showMobileSheet, setShowMobileSheet] = useState(false)
+
+  const [lastKey, setLastKey] = useState<{ key: string; time: number } | null>(
+    null,
+  )
 
   const { signout } = useSignout()
   const { isLoading } = useAuthStatus()
@@ -37,11 +48,112 @@ function App() {
   const location = useLocation()
   const navigate = useNavigate()
 
+  const [showCommandPanel, setShowCommandPanel] = useState<boolean>(false)
+  const [showCreateTransactionShortcut, setShowCreateTransactionShortcut] =
+    useState<boolean>(false)
+  const [createTransactionMode, setCreateTransactionMode] = useState<
+    TransactionType | undefined
+  >(undefined)
+
+  const closeCommandPanel = () => setShowCommandPanel(false)
+  const toggleCommandPanel = () => setShowCommandPanel(!showCommandPanel)
+  const toggleShowCreateTransaction = () =>
+    setShowCreateTransactionShortcut(!showCreateTransactionShortcut)
+  const closeShowCreateTransaction = () =>
+    setShowCreateTransactionShortcut(false)
   const toggleShowMobileSheet = () => setShowMobileSheet(!showMobileSheet)
 
   useEffect(() => {
     if (showMobileSheet) setShowMobileSheet(false)
   }, [location])
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (!enableShortcut || !user) return
+
+      // Handle cmd + K
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        toggleCommandPanel()
+      }
+
+      // handle keys g & d combination
+      if (e.key === 'g' || e.key === 'd') {
+        if (
+          lastKey &&
+          e.key === 'd' &&
+          lastKey.key === 'g' &&
+          Date.now() - lastKey.time < 2000
+        ) {
+          setLastKey(null)
+          navigate('/app/dashboard')
+        } else {
+          setLastKey({ key: e.key, time: Date.now() })
+        }
+      }
+
+      if (e.key === 'g' || e.key === 'h') {
+        if (
+          lastKey &&
+          e.key === 'h' &&
+          lastKey.key === 'g' &&
+          Date.now() - lastKey.time < 2000
+        ) {
+          setLastKey(null)
+          navigate('/')
+        } else {
+          setLastKey({ key: e.key, time: Date.now() })
+        }
+      }
+
+      if (e.key === 'g' || e.key === 't') {
+        if (
+          lastKey &&
+          e.key === 't' &&
+          lastKey.key === 'g' &&
+          Date.now() - lastKey.time < 2000
+        ) {
+          setLastKey(null)
+          navigate('/app/transactions')
+        } else {
+          setLastKey({ key: e.key, time: Date.now() })
+        }
+      }
+
+      // Handle shift + T combination
+      if (e.key === 'T' && e.shiftKey) {
+        setShowCreateTransactionShortcut(true)
+        setCreateTransactionMode(TransactionType.ONE_TIME)
+      }
+
+      if (e.key === 'P' && e.shiftKey) {
+        setShowCreateTransactionShortcut(true)
+        setCreateTransactionMode(TransactionType.RECURRING)
+      }
+
+      if (e.key === 'R' && e.shiftKey) {
+        setShowCreateTransactionShortcut(true)
+        setCreateTransactionMode(TransactionType.REFUND)
+      }
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [enableShortcut, showCommandPanel, lastKey, user])
+
+  const showCreateTransaction = (mode: TransactionType) => {
+    setShowCreateTransactionShortcut(true)
+    setCreateTransactionMode(mode)
+  }
+
+  useEffect(() => {
+    if (lastKey && lastKey.key === 'g') {
+      const timeoutId = setTimeout(() => {
+        setLastKey(null)
+      }, 2000)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [lastKey])
 
   const logout = async () => {
     signout().then(() => {
@@ -50,7 +162,7 @@ function App() {
     })
   }
 
-  if (isLoading)
+  if (isLoading || isLoadingCategories)
     return (
       <div className="flex items-center justify-center h-screen">
         <p>Chargement de l'application...</p>
@@ -168,6 +280,11 @@ function App() {
               MoneyManager
             </span>
           </Link>
+          {user && (
+            <kbd className="kbd kbd-md flex gap-2 text-black">
+              <Command size={14} /> K
+            </kbd>
+          )}
           <div className="hidden md:flex items-center gap-4">
             {user && (
               <>
@@ -250,6 +367,17 @@ function App() {
         </main>
       </div>
       <Toaster richColors />
+      <CommandPanel
+        showCreateTransaction={showCreateTransaction}
+        open={showCommandPanel}
+        onOpenChange={closeCommandPanel}
+      />
+      <CreateTransactionShortcut
+        open={showCreateTransactionShortcut}
+        onOpenChange={toggleShowCreateTransaction}
+        mode={createTransactionMode}
+        onClose={closeShowCreateTransaction}
+      />
     </div>
   )
 }

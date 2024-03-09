@@ -43,7 +43,7 @@ export const Home = () => {
       <section className="mx-auto flex max-w-[980px] flex-col items-center gap-2 py-8 md:py-4 md:pb-4 lg:py-12 lg:pb-12">
         <span className="max-w-[750px] text-center text-xl lg:text-3xl text-muted-foreground sm:text-xl">
           Prenez le contrôle de vos finances dès aujourd&apos;hui avec cette
-          application de gestion des dépenses intelligente!
+          application de gestion des dépenses simple et intuitive!
         </span>
       </section>
       <section className="max-w-full px-0 md:px-10 pb-10">

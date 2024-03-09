@@ -51,7 +51,7 @@ const BigInput = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type="number"
           className={cn(
-            'w-full text-[80px] outline-none bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
+            'w-full text-[60px] px-2 outline-none bg-transparent [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
             className,
           )}
           ref={ref}
