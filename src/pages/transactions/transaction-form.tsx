@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form.tsx'
-import { Input } from '@/components/ui/input.tsx'
+import { BigInput, Input } from '@/components/ui/input.tsx'
 import { Button } from '@/components/ui/button.tsx'
 import { Switch } from '@/components/ui/switch.tsx'
 import { Badge } from '@/components/ui/badge.tsx'
@@ -28,8 +28,9 @@ import {
   TransactionType,
   TransactionForm as TransactionFormSchema,
 } from '@/domain/transaction.ts'
-import { Calendar, Check, EuroIcon, Plus } from 'lucide-react'
+import { Calendar, Check, Plus } from 'lucide-react'
 import { useQueryClient } from 'react-query'
+import { useUserStore } from '@/store/store.ts'
 
 const now = new Date()
 const lastDayOfMonth = new Date(
@@ -40,7 +41,7 @@ const lastDayOfMonth = new Date(
 
 const expenseSchema = z.object({
   name: z.string().min(1, 'Champ obligatoire'),
-  amount: z.coerce.number().min(0.01),
+  amount: z.string(),
   type: z.nativeEnum(TransactionType),
   day: z.coerce
     .number()
@@ -74,6 +75,18 @@ export const TransactionForm = ({
 }: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
   const queryClient = useQueryClient()
+  const setEnableShortcuts = useUserStore((state) => state.setEnableShortcuts)
+  const enableShortcut = useUserStore((state) => state.enableShortcuts)
+
+  useEffect(() => {
+    if (open && enableShortcut) {
+      setEnableShortcuts(false)
+    }
+
+    if (!open && !enableShortcut) {
+      setEnableShortcuts(true)
+    }
+  }, [open])
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -92,7 +105,7 @@ export const TransactionForm = ({
     mode: 'onChange',
     defaultValues: {
       name: expense?.name ?? '',
-      amount: expense?.amount ?? 1,
+      amount: `${expense?.amount ?? 1}`,
       day: expense?.day ?? new Date().getDate(),
       type: expense?.type ?? type,
       category_id:
@@ -128,12 +141,12 @@ export const TransactionForm = ({
   }
 
   const onSubmit = async (values: z.infer<typeof expenseSchema>) => {
-    console.log('in on sibmut')
     setLoading(true)
+    const amount = parseFloat(values.amount).toFixed(2)
     submitHandler({
       ...expense,
       ...values,
-      amount: parseFloat(values.amount.toFixed(2)),
+      amount: parseFloat(amount),
     })
       .then(() => {
         form.reset()
@@ -153,28 +166,54 @@ export const TransactionForm = ({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
-              name="name"
+              name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nom</FormLabel>
+                  <FormLabel>Montant</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <BigInput
+                      value={field.value}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D,./g, '')
+
+                        if (value) {
+                          if (value.includes('.')) {
+                            const parts = value.split('.')
+                            if (parts[1].length > 2) {
+                              e.preventDefault()
+                            } else {
+                              form.setValue('amount', `${value}`, {
+                                shouldValidate: true,
+                              })
+                            }
+                          } else {
+                            const asNumber = parseFloat(value)
+                            form.setValue('amount', `${asNumber}`, {
+                              shouldValidate: true,
+                            })
+                          }
+                        } else {
+                          form.setValue('amount', '', { shouldValidate: true })
+                        }
+                      }}
+                      type="number"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <FormField
-                name="amount"
+                name="name"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Montant</FormLabel>
+                  <FormItem className="col-span-2">
+                    <FormLabel>Nom</FormLabel>
                     <FormControl>
-                      <Input endIcon={<EuroIcon size={20} />} {...field} />
+                      <Input {...field} autoFocus={false} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

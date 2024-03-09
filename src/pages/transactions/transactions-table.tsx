@@ -29,6 +29,8 @@ interface Props {
 
 const fullConfig = resolveConfig(tailwindConfig)
 
+const today = new Date().getDate()
+
 export const TransactionsTable = (props: Props) => {
   const { type, categories } = props
   const transactionActions = useTransactionActions()
@@ -36,7 +38,7 @@ export const TransactionsTable = (props: Props) => {
   const [searchText, setSearchText] = useState('')
   const debouncedSearch = useDebounce(searchText, 300)
   const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>(
-    'desc',
+    today > 15 ? 'desc' : 'asc',
   )
   const [showAddTransaction, setShowAddTransaction] = useState(false)
 

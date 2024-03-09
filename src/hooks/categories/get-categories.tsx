@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Category } from '@/domain/category.ts'
 import { getTokenOrFail } from '@/lib/utils.ts'
+import { useUserStore } from '@/store/store.ts'
 
 const getCategoriesFn = async (): Promise<Category[]> => {
   const token = getTokenOrFail()
@@ -31,13 +32,16 @@ const getCategoriesFn = async (): Promise<Category[]> => {
 }
 
 export const useGetCategories = () => {
-  const { data, isError, error, isLoading } = useQuery(
-    ['categories'],
-    getCategoriesFn,
-    {
-      refetchOnWindowFocus: false,
+  const setCategories = useUserStore((state) => state.setCategories)
+  const { data, isError, error, isLoading } = useQuery({
+    queryKey: ['categories'],
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      return getCategoriesFn().then((categories) => {
+        setCategories(categories)
+      })
     },
-  )
+  })
 
   useEffect(() => {
     if (isError && error) {
