@@ -10,7 +10,6 @@ import { TransactionCategory } from '@/pages/transactions/transaction-category.t
 import { useTransactionActions } from '@/hooks/transactions/transaction-actions.tsx'
 import { useState } from 'react'
 import { TransactionType } from '@/domain/transaction.ts'
-import { Separator } from '@/components/ui/separator.tsx'
 
 interface Props {
   open: boolean
