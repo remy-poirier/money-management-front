@@ -60,7 +60,6 @@ interface Props {
   expense?: Transaction
   mode: 'add' | 'edit' | 'wage' | 'editMobile' | 'addMobile'
   submitHandler: (expense: TransactionFormSchema) => Promise<Transaction>
-  categories: Category[]
 }
 
 export const TransactionForm = ({
@@ -69,11 +68,12 @@ export const TransactionForm = ({
   type,
   expense,
   submitHandler,
-  categories,
   onOpenChange,
   mode,
 }: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
+  const categories = useUserStore((state) => state.categories)
+
   const queryClient = useQueryClient()
   const setEnableShortcuts = useUserStore((state) => state.setEnableShortcuts)
   const enableShortcut = useUserStore((state) => state.enableShortcuts)

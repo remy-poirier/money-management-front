@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button.tsx'
 import { Label } from '@/components/ui/label.tsx'
 import { Switch } from '@/components/ui/switch.tsx'
 import { Transaction, TransactionType } from '@/domain/transaction.ts'
-import { Category } from '@/domain/category'
 import { useTransactionActions } from '@/hooks/transactions/transaction-actions.tsx'
 import { ArrowDown, Ban, Plus, SortAsc, SortDesc } from 'lucide-react'
 import { useGetTransactions } from '@/hooks/transactions/get-transactions.tsx'
@@ -23,7 +22,6 @@ import tailwindConfig from '../../../tailwind.config'
 import { TransactionsMobile } from '@/pages/transactions/transactions-mobile.tsx'
 
 interface Props {
-  categories: Category[]
   type: TransactionType
 }
 
@@ -32,7 +30,7 @@ const fullConfig = resolveConfig(tailwindConfig)
 const today = new Date().getDate()
 
 export const TransactionsTable = (props: Props) => {
-  const { type, categories } = props
+  const { type } = props
   const transactionActions = useTransactionActions()
   const [showCollected, setShowCollected] = useState(false)
   const [searchText, setSearchText] = useState('')
@@ -141,7 +139,6 @@ export const TransactionsTable = (props: Props) => {
                   .map((_, i) => (
                     <TransactionItem
                       key={i}
-                      categories={[]}
                       loading={true}
                       transaction={undefined}
                     />
@@ -150,7 +147,6 @@ export const TransactionsTable = (props: Props) => {
                 transactions.map((transaction) => (
                   <TransactionItem
                     key={transaction.id}
-                    categories={categories}
                     loading={false}
                     transaction={transaction}
                   />
@@ -187,11 +183,7 @@ export const TransactionsTable = (props: Props) => {
 
       {isSmallDevice && (
         <>
-          <TransactionsMobile
-            categories={categories}
-            loading={loading}
-            transactions={transactions}
-          />
+          <TransactionsMobile loading={loading} transactions={transactions} />
           {lastPage > 1 && (
             <div className="flex md:hidden justify-center">
               <Button onClick={() => fetchNextPage()} disabled={!hasNextPage}>
@@ -211,7 +203,6 @@ export const TransactionsTable = (props: Props) => {
       <TransactionForm
         mode="add"
         submitHandler={transactionActions.add.mutateAsync}
-        categories={categories}
         type={type}
         open={showAddTransaction}
         onClose={closeAddTransaction}

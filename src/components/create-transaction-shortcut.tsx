@@ -1,6 +1,5 @@
 import { TransactionType } from '@/domain/transaction.ts'
 import { TransactionForm } from '@/pages/transactions/transaction-form.tsx'
-import { useUserStore } from '@/store/store.ts'
 import { useTransactionActions } from '@/hooks/transactions/transaction-actions.tsx'
 
 interface Props {
@@ -16,7 +15,6 @@ export const CreateTransactionShortcut = ({
   mode,
 }: Props) => {
   const { add } = useTransactionActions()
-  const categories = useUserStore((state) => state.categories)
 
   if (open && !mode) {
     console.error('No mode provided for transaction creation')
@@ -27,7 +25,6 @@ export const CreateTransactionShortcut = ({
     <TransactionForm
       mode="add"
       submitHandler={add.mutateAsync}
-      categories={categories}
       type={mode ?? TransactionType.ONE_TIME}
       open={open}
       onClose={onOpenChange}

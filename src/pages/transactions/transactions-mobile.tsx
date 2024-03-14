@@ -1,30 +1,19 @@
 import { Transaction } from '@/domain/transaction.ts'
 import { TransactionItem } from '@/pages/transactions/transaction-item.tsx'
 import groupBy from 'lodash/groupBy'
-import { Category } from '@/domain/category.ts'
 import { Ban } from 'lucide-react'
 
 interface Props {
   loading: boolean
   transactions: Transaction[]
-  categories: Category[]
 }
 
-export const TransactionsMobile = ({
-  loading,
-  transactions,
-  categories,
-}: Props) => {
+export const TransactionsMobile = ({ loading, transactions }: Props) => {
   if (loading) {
     return Array(10)
       .fill('')
       .map((_, i) => (
-        <TransactionItem
-          key={i}
-          categories={[]}
-          loading={true}
-          transaction={undefined}
-        />
+        <TransactionItem key={i} loading={true} transaction={undefined} />
       ))
   }
 
@@ -68,7 +57,6 @@ export const TransactionsMobile = ({
                 <TransactionItem
                   key={transaction.id}
                   transaction={transaction}
-                  categories={categories}
                   loading={false}
                 />
               ))}

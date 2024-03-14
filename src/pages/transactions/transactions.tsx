@@ -1,10 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { TransactionsTable } from '@/pages/transactions/transactions-table.tsx'
 import { TransactionType } from '@/domain/transaction.ts'
-import { useGetCategories } from '@/hooks/categories/get-categories.tsx'
 
 export const Transactions = () => {
-  const { categories, isLoading } = useGetCategories()
   return (
     <div>
       <Tabs defaultValue="transactions" className="pb-6">
@@ -20,31 +18,13 @@ export const Transactions = () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="transactions">
-          {isLoading && <div>Loading...</div>}
-          {!isLoading && (
-            <TransactionsTable
-              categories={categories ?? []}
-              type={TransactionType.ONE_TIME}
-            />
-          )}
+          <TransactionsTable type={TransactionType.ONE_TIME} />
         </TabsContent>
         <TabsContent value="recurrings">
-          {isLoading && <div>Loading...</div>}
-          {!isLoading && (
-            <TransactionsTable
-              categories={categories ?? []}
-              type={TransactionType.RECURRING}
-            />
-          )}
+          <TransactionsTable type={TransactionType.RECURRING} />
         </TabsContent>
         <TabsContent value="refunds">
-          {isLoading && <div>Loading...</div>}
-          {!isLoading && (
-            <TransactionsTable
-              categories={categories ?? []}
-              type={TransactionType.REFUND}
-            />
-          )}
+          <TransactionsTable type={TransactionType.REFUND} />
         </TabsContent>
       </Tabs>
     </div>

@@ -3,7 +3,6 @@ import {
   TransactionForm as TransactionEdition,
 } from '@/domain/transaction'
 import { TransactionItemDesktop } from '@/pages/transactions/transaction-item-desktop.tsx'
-import { Category } from '@/domain/category.ts'
 import { TransactionItemMobile } from '@/pages/transactions/transaction-item-mobile.tsx'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '../../../tailwind.config.js'
@@ -17,13 +16,11 @@ import { TransactionForm } from '@/pages/transactions/transaction-form.tsx'
 type LoadingProps = {
   loading: true
   transaction: undefined
-  categories: Category[]
 }
 
 type SuccessProps = {
   loading: false
   transaction: Transaction
-  categories: Category[]
 }
 
 type Props = LoadingProps | SuccessProps
@@ -39,11 +36,7 @@ export interface TransactionActionsBag {
 }
 
 const fullConfig = resolveConfig(tailwindConfig)
-export const TransactionItem = ({
-  loading,
-  transaction,
-  categories,
-}: Props) => {
+export const TransactionItem = ({ loading, transaction }: Props) => {
   const [showArchive, setShowArchive] = useState<boolean>(false)
   const [showToggle, setShowToggle] = useState<boolean>(false)
   const [showEdit, setShowEdit] = useState<boolean>(false)
@@ -138,7 +131,6 @@ export const TransactionItem = ({
             type={transaction.type}
             mode={'edit'}
             submitHandler={editTransaction}
-            categories={categories}
             expense={transaction}
           />
         </>
