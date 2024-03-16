@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 import { Separator } from '@/components/ui/separator.tsx'
-import { EuroIcon } from 'lucide-react'
+import { CurrencyIcon } from '@/components/currency-icon.tsx'
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -42,10 +42,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 Input.displayName = 'Input'
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  currency?: string
+}
 
 const BigInput = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, ...props }, ref) => {
+  ({ className, currency, ...props }, ref) => {
     return (
       <div className="items-center gap-2 flex h-auto w-full rounded-md bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 border border-input">
         <input
@@ -58,7 +60,7 @@ const BigInput = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         <Separator orientation="vertical" />
-        <EuroIcon size={60} />
+        <CurrencyIcon size={60} currency={currency} />
       </div>
     )
   },

@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
+import { CurrencyIcon } from '@/components/currency-icon.tsx'
 
 interface Props {
   isLoading?: boolean
@@ -43,7 +44,11 @@ const StatisticsItem = ({
           {isLoading && <Skeleton className="w-full h-[1.5rem]" />}
           {!isLoading && (
             <>
-              <span className={cn('text-2xl font-bold', color)}>{value}</span>
+              <span
+                className={cn('text-2xl font-bold flex items-center', color)}
+              >
+                {value} <CurrencyIcon size={25} />
+              </span>
               {subValue}
             </>
           )}

@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { Separator } from '@/components/ui/separator.tsx'
 import { TransactionActionsBag } from '@/pages/transactions/transaction-item.tsx'
 import { TransactionCategory } from '@/pages/transactions/transaction-category.tsx'
+import { CurrencyIcon } from '@/components/currency-icon.tsx'
 
 type LoadingProps = {
   loading: true
@@ -96,9 +97,9 @@ export const TransactionItemMobile = ({
             </span>
           </div>
           <div>
-            <span className="font-bold">
+            <span className="font-bold flex items-center">
               {transaction.type === 'REFUND' ? '+' : '-'}
-              {transaction.amount} €
+              {transaction.amount} <CurrencyIcon size={20} />
             </span>
           </div>
         </div>

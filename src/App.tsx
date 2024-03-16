@@ -30,6 +30,7 @@ import { CreateTransactionShortcut } from '@/components/create-transaction-short
 import { TransactionType } from '@/domain/transaction.ts'
 import { useGetCategories } from '@/hooks/categories/get-categories.tsx'
 import { ToggleTransactionsPanel } from '@/components/toggle-transactions-panel.tsx'
+import { CurrencyIcon } from '@/components/currency-icon.tsx'
 
 function App() {
   const user = useUserStore((state) => state.user)
@@ -74,7 +75,7 @@ function App() {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (!enableShortcut || !user) return
+      if (!enableShortcut || !user || (user && !user.isOnboarded)) return
 
       // Handle cmd + K
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -300,7 +301,7 @@ function App() {
               MoneyManager
             </span>
           </Link>
-          {user && (
+          {user && user.isOnboarded && (
             <kbd className="kbd kbd-md flex gap-2 text-black">
               <Command size={14} /> K
             </kbd>
@@ -333,8 +334,8 @@ function App() {
                     <DropdownMenuLabel>
                       Connecté(e) en tant que {user.fullName ?? user.email}{' '}
                       <br />
-                      <span className="text-xs italic font-light">
-                        Montant sur compte: {user.balance}€
+                      <span className="text-xs italic font-light flex items-center">
+                        Montant sur compte: {user.balance} <CurrencyIcon />
                       </span>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />

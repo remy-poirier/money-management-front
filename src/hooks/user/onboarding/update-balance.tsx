@@ -7,6 +7,7 @@ import { getTokenOrFail } from '@/lib/utils.ts'
 
 interface UpdateOnboardingBalanceProps {
   balance: number
+  currency: string
 }
 
 const updateOnboardingBalance = async (
@@ -40,10 +41,12 @@ const updateOnboardingBalance = async (
 
 export const useUpdateBalance = () => {
   const setBalance = useUserStore((state) => state.updateBalance)
+  const setCurrency = useUserStore((state) => state.updateCurrency)
   const { mutateAsync, isError, error } = useMutation({
     mutationFn: async (data: UpdateOnboardingBalanceProps) => {
       updateOnboardingBalance(data).then((balance) => {
         setBalance(balance.balance)
+        setCurrency(data.currency)
       })
     },
   })

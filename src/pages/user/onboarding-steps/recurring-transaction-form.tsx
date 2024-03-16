@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button.tsx'
-import { Calendar, EuroIcon, Plus } from 'lucide-react'
+import { Calendar, Plus } from 'lucide-react'
 import { useState } from 'react'
 import {
   Form,
@@ -21,6 +21,7 @@ import {
   DialogContent,
   DialogFooter,
 } from '@/components/ui/dialog'
+import { CurrencyIcon } from '@/components/currency-icon.tsx'
 
 interface Props {
   addTransaction: (transaction: OnboardingTransaction) => void
@@ -96,7 +97,11 @@ export const RecurringTransactionForm = ({ addTransaction }: Props) => {
                   <FormItem>
                     <FormLabel>Montant du prélèvement</FormLabel>
                     <FormControl>
-                      <Input {...field} type="number" endIcon={<EuroIcon />} />
+                      <Input
+                        {...field}
+                        type="number"
+                        endIcon={<CurrencyIcon size={20} />}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

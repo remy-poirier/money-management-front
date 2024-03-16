@@ -5,6 +5,7 @@ import { Category } from '@/domain/category.ts'
 interface UserStore {
   user?: User
   updateBalance: (newBalance: number) => void
+  updateCurrency: (currency: string) => void
   setOnboardingStatus: (data: {
     status: OnboardingStatus
     isOnboarded: boolean
@@ -45,6 +46,20 @@ export const useUserStore = create<UserStore>()((set) => ({
         user: {
           ...state.user,
           balance: newBalance,
+        },
+      }
+    }),
+  updateCurrency: (currency: string) =>
+    set((state) => {
+      console.log('ooooook => ', currency)
+      if (!state.user) {
+        return state
+      }
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          currency,
         },
       }
     }),

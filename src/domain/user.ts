@@ -11,6 +11,8 @@ export interface User {
 
   createdAt: Date
   updatedAt: Date
+
+  currency: string
 }
 
 export enum OnboardingStatus {

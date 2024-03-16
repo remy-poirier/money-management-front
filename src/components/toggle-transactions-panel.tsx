@@ -10,6 +10,7 @@ import { TransactionCategory } from '@/pages/transactions/transaction-category.t
 import { useTransactionActions } from '@/hooks/transactions/transaction-actions.tsx'
 import { useState } from 'react'
 import { TransactionType } from '@/domain/transaction.ts'
+import { CurrencyIcon } from '@/components/currency-icon.tsx'
 
 interface Props {
   open: boolean
@@ -74,7 +75,9 @@ export const ToggleTransactionsPanel = ({ open, onOpenChange }: Props) => {
                 ID: {transaction.id}
               </span>
             </div>
-            <span className="text-md font-bold">{transaction.amount} €</span>
+            <span className="text-md font-bold flex items-center">
+              {transaction.amount} <CurrencyIcon />
+            </span>
           </CommandItem>
         ))}
       </CommandList>

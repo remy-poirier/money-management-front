@@ -45,20 +45,20 @@ export const Dashboard = () => {
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <StatisticItem
           label="Montant sur compte"
-          value={`${user.balance.toFixed(2)}€`}
+          value={`${user.balance.toFixed(2)}`}
           color={user.balance < 0 ? 'text-red-600' : 'text-green-600'}
           icon={<LandmarkIcon />}
         />
         <StatisticItem
           label="Total à venir"
           isLoading={isLoading}
-          value={`${statistics?.totalToCome} €`}
+          value={`${statistics?.totalToCome}`}
           icon={<LandmarkIcon />}
         />
         <StatisticItem
           label="Restant ce mois-ci"
           isLoading={isLoading}
-          value={`${statistics?.amountLeftForMonth} €`}
+          value={`${statistics?.amountLeftForMonth}`}
           icon={<PiggyBank />}
           subValue={
             <div className="flex flex-row items-center gap-4">
@@ -73,7 +73,7 @@ export const Dashboard = () => {
         <StatisticItem
           label="Dernière paye"
           isLoading={loadingLastWage}
-          value={`${wage?.toFixed(2) ?? 0} €`}
+          value={`${wage?.toFixed(2) ?? 0}`}
           icon={<EuroIcon />}
           actions={
             <div className="flex gap-2">
@@ -87,21 +87,21 @@ export const Dashboard = () => {
         <StatisticItem
           label="Paiements à venir"
           isLoading={isLoading}
-          value={`${statistics?.oneTime.toCome} €`}
+          value={`${statistics?.oneTime.toCome}`}
           icon={<CreditCard />}
           helper={`Réparti en ${statistics?.transactions.oneTime.toCome} paiement${(statistics?.transactions.oneTime.toCome ?? 0) > 1 ? 's' : ''}`}
         />
         <StatisticItem
           label="Prélèvements à venir"
           isLoading={isLoading}
-          value={`${statistics?.recurring.toCome} €`}
+          value={`${statistics?.recurring.toCome}`}
           icon={<CalendarRange />}
           helper={`Réparti en ${statistics?.transactions.recurring.toCome} prélèvement${(statistics?.transactions.recurring.toCome ?? 0) > 1 ? 's' : ''}`}
         />
         <StatisticItem
           label="Remboursements à venir"
           isLoading={isLoading}
-          value={`${statistics?.refunds.toCome} €`}
+          value={`${statistics?.refunds.toCome}`}
           icon={<Banknote />}
           helper={`Réparti en ${statistics?.transactions.refunds.toCome} remboursement${(statistics?.transactions.refunds.toCome ?? 0) > 1 ? 's' : ''}`}
         />

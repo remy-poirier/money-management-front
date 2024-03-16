@@ -8,6 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table.tsx'
 import { Button } from '@/components/ui/button.tsx'
+import { CurrencyIcon } from '@/components/currency-icon.tsx'
 
 interface Props {
   transactions: OnboardingTransaction[]
@@ -55,7 +56,14 @@ export const RecurringTransactionsList = ({
           {transactions.map((transaction, index) => (
             <TableRow key={index}>
               <TableCell>{transaction.name}</TableCell>
-              <TableCell>{transaction.amount}</TableCell>
+              <TableCell>
+                <span className="flex items-center gap-2">
+                  {transaction.amount}{' '}
+                  <span className="flex items-center">
+                    <CurrencyIcon size={12} />
+                  </span>
+                </span>
+              </TableCell>
               <TableCell>{transaction.day}</TableCell>
               <TableCell className="text-right">
                 <Button

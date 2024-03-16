@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button.tsx'
 import { TransactionActionsBag } from '@/pages/transactions/transaction-item.tsx'
 import { TransactionCategory } from '@/pages/transactions/transaction-category.tsx'
+import { CurrencyIcon } from '@/components/currency-icon.tsx'
 
 type LoadingProps = {
   loading: true
@@ -61,7 +62,11 @@ export const TransactionItemDesktop = ({
     <TableRow className="hidden md:table-row">
       <TableCell>{transaction.day}</TableCell>
       <TableCell>{transaction.name}</TableCell>
-      <TableCell>{transaction.amount} €</TableCell>
+      <TableCell>
+        <span className="flex items-center">
+          {transaction.amount} <CurrencyIcon size={15} />
+        </span>
+      </TableCell>
       <TableCell>
         <Badge className="pl-0 rounded-3xl h-[25px] py-0 bg-slate-800 dark:bg-slate-400">
           <TransactionCategory categoryId={transaction.category.id} />

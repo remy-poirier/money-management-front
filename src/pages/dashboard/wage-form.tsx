@@ -24,6 +24,7 @@ import { toast } from 'sonner'
 import { useQueryClient } from 'react-query'
 import { CheckCircle2, XCircle } from 'lucide-react'
 import { useUserStore } from '@/store/store.ts'
+import { CurrencyIcon } from '@/components/currency-icon.tsx'
 
 interface Props {
   wageAmount?: number
@@ -98,7 +99,7 @@ const WageForm = ({
                   <FormLabel>Montant</FormLabel>
                   <FormControl>
                     <Input
-                      startIcon={'€'}
+                      startIcon={<CurrencyIcon size={20} />}
                       endIcon={
                         isValid() ? (
                           <CheckCircle2 color="green" />
@@ -110,8 +111,8 @@ const WageForm = ({
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Le montant doit être de minimum 1€
+                  <FormDescription className="flex items-center">
+                    Le montant doit être de minimum 1 <CurrencyIcon size={12} />
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
