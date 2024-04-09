@@ -109,7 +109,7 @@ export const TransactionForm = ({
       day: expense?.day ?? new Date().getDate(),
       type: expense?.type ?? type,
       category_id:
-        expense?.category_id ?? '8fbd6c98-cc0f-11ee-9489-325096b39f47',
+        expense?.category.id ?? '8fbd6c98-cc0f-11ee-9489-325096b39f47',
       collected: expense?.collected ?? type === 'REFUND',
       archived: expense?.archived ?? false,
     },
