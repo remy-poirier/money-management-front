@@ -1,5 +1,5 @@
 import { common } from '@/conf/common.ts'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Category } from '@/domain/category.ts'

@@ -29,7 +29,7 @@ import {
   TransactionForm as TransactionFormSchema,
 } from '@/domain/transaction.ts'
 import { Calendar, Check, Plus } from 'lucide-react'
-import { useQueryClient } from 'react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useUserStore } from '@/store/store.ts'
 
 const now = new Date()

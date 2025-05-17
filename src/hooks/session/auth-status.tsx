@@ -1,5 +1,5 @@
 import { common } from '@/conf/common.ts'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useUserStore } from '@/store/store.ts'
 import { User } from '@/domain/user.ts'
 import { getTokenOrFail } from '@/lib/utils.ts'

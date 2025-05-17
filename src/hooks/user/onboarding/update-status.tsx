@@ -1,6 +1,6 @@
 import { OnboardingStatus } from '@/domain/user.ts'
 import { common } from '@/conf/common.ts'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useUserStore } from '@/store/store.ts'
 import { useEffect } from 'react'
 import { toast } from 'sonner'

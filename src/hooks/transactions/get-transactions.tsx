@@ -1,6 +1,6 @@
 import { Paginate } from '@/domain/paginate.ts'
 import { common } from '@/conf/common.ts'
-import { useInfiniteQuery } from 'react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Transaction, TransactionSearch } from '@/domain/transaction.ts'

@@ -1,6 +1,6 @@
 import { User } from '@/domain/user.ts'
 import { common } from '@/conf/common.ts'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Token } from '@/domain/auth.ts'

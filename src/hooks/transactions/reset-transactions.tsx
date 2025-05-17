@@ -1,5 +1,5 @@
 import { common } from '@/conf/common.ts'
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { Statistics } from '@/domain/statistics.ts'

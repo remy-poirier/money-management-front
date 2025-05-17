@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { User } from '@/domain/user.ts'
 import { common } from '@/conf/common.ts'
 import { toast } from 'sonner'

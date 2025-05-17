@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
 
 const buttonVariants = cva(
-  'inline-flex items-center relative justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center relative justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring cursor-pointer disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -44,40 +44,38 @@ export interface ButtonProps
   loading?: boolean
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      children,
-      variant,
-      size,
-      asChild = false,
-      loading = false,
-      disabled = false,
-      ...props
-    },
-    ref,
-  ) => {
-    const Comp = asChild ? Slot : 'button'
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-        disabled={loading || disabled}
-      >
-        {children}
-        {loading && (
-          <div className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]">
-            <div className="animate-spin">
-              <Loader2 />
-            </div>
+const Button = ({
+  ref,
+  className,
+  children,
+  variant,
+  size,
+  asChild = false,
+  loading = false,
+  disabled = false,
+  ...props
+}: ButtonProps & {
+  ref: React.RefObject<HTMLButtonElement>
+}) => {
+  const Comp = asChild ? Slot : 'button'
+  return (
+    <Comp
+      className={cn(buttonVariants({ variant, size, className }))}
+      ref={ref}
+      {...props}
+      disabled={loading || disabled}
+    >
+      {children}
+      {loading && (
+        <div className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]">
+          <div className="animate-spin">
+            <Loader2 />
           </div>
-        )}
-      </Comp>
-    )
-  },
-)
+        </div>
+      )}
+    </Comp>
+  )
+}
 Button.displayName = 'Button'
 
 export { Button, buttonVariants }

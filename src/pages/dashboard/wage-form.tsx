@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
-import { useQueryClient } from 'react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { CheckCircle2, XCircle } from 'lucide-react'
 import { useUserStore } from '@/store/store.ts'
 import { CurrencyIcon } from '@/components/currency-icon.tsx'

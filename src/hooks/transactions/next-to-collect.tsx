@@ -3,7 +3,7 @@ import { getTokenOrFail } from '@/lib/utils.ts'
 import { common } from '@/conf/common.ts'
 import { toast } from 'sonner'
 import { useEffect } from 'react'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 const nextToCollectFn = async (): Promise<Transaction[]> => {
   const token = getTokenOrFail()
