@@ -1,6 +1,3 @@
-import tailwindCSSAnimate from 'tailwindcss-animate'
-import daisyUi from 'daisyui'
-
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ['class'],
@@ -76,5 +73,4 @@ export default {
       },
     },
   },
-  plugins: [tailwindCSSAnimate, daisyUi],
 }
