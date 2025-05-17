@@ -4,8 +4,6 @@ import {
 } from '@/domain/transaction'
 import { TransactionItemDesktop } from '@/pages/transactions/transaction-item-desktop.tsx'
 import { TransactionItemMobile } from '@/pages/transactions/transaction-item-mobile.tsx'
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../../tailwind.config.js'
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { useState } from 'react'
 import { useTransactionActions } from '@/hooks/transactions/transaction-actions.tsx'
@@ -35,7 +33,6 @@ export interface TransactionActionsBag {
   archive: TransactionActionsBagItem
 }
 
-const fullConfig = resolveConfig(tailwindConfig)
 export const TransactionItem = ({ loading, transaction }: Props) => {
   const [showArchive, setShowArchive] = useState<boolean>(false)
   const [showToggle, setShowToggle] = useState<boolean>(false)
@@ -50,9 +47,7 @@ export const TransactionItem = ({ loading, transaction }: Props) => {
   const closeToggle = () => setShowToggle(false)
   const closeEdit = () => setShowEdit(false)
 
-  const isSmallDevice = useMediaQuery(
-    `only screen and (max-width : ${fullConfig.theme.screens.md})`,
-  )
+  const isSmallDevice = useMediaQuery(`only screen and (max-width : 28rem)`)
 
   if (loading) {
     return (

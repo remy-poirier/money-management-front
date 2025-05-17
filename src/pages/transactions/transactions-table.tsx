@@ -17,15 +17,11 @@ import { useDebounce, useMediaQuery } from '@uidotdev/usehooks'
 import { Input } from '@/components/ui/input.tsx'
 import { TransactionItem } from '@/pages/transactions/transaction-item.tsx'
 import { TransactionForm } from '@/pages/transactions/transaction-form.tsx'
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../../tailwind.config'
 import { TransactionsMobile } from '@/pages/transactions/transactions-mobile.tsx'
 
 interface Props {
   type: TransactionType
 }
-
-const fullConfig = resolveConfig(tailwindConfig)
 
 const today = new Date().getDate()
 
@@ -40,9 +36,7 @@ export const TransactionsTable = (props: Props) => {
   )
   const [showAddTransaction, setShowAddTransaction] = useState(false)
 
-  const isSmallDevice = useMediaQuery(
-    `only screen and (max-width : ${fullConfig.theme.screens.md})`,
-  )
+  const isSmallDevice = useMediaQuery(`only screen and (max-width : 28rem)`)
 
   const toggleAddTransaction = () => setShowAddTransaction((prev) => !prev)
   const closeAddTransaction = () => setShowAddTransaction(false)
