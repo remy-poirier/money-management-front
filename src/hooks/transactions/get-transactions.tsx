@@ -9,6 +9,7 @@ import { getTokenOrFail } from '@/lib/utils.ts'
 const getTransactionsFn =
   (transactionSearch: TransactionSearch) =>
   async ({ pageParam = 1 }): Promise<Paginate<Transaction>> => {
+    console.log('ok page param => ', pageParam)
     const token = getTokenOrFail()
     if (!token) return Promise.reject('No token found')
 
@@ -23,6 +24,9 @@ const getTransactionsFn =
       }
     })
     url.searchParams.append('page', `${pageParam}`)
+    if (pageParam) {
+      url.searchParams.append('offset', `${(pageParam ?? 0) * 10}`)
+    }
     return fetch(url, {
       method: 'GET',
       credentials: 'include',
@@ -61,6 +65,7 @@ export const useGetTransactions = (transactionSearch: TransactionSearch) => {
       transactionSearch.orderByDirection,
     ],
     queryFn: getTransactionsFn(transactionSearch),
+    initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       if (lastPage.meta.currentPage === lastPage.meta.lastPage) {
         return undefined

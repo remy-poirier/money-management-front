@@ -28,7 +28,7 @@ const today = new Date().getDate()
 export const TransactionsTable = (props: Props) => {
   const { type } = props
   const transactionActions = useTransactionActions()
-  const [showCollected, setShowCollected] = useState(false)
+  const [showCollected, setShowCollected] = useState(true)
   const [searchText, setSearchText] = useState('')
   const debouncedSearch = useDebounce(searchText, 300)
   const [orderByDirection, setOrderByDirection] = useState<'asc' | 'desc'>(
