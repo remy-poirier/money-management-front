@@ -31,11 +31,10 @@ const getStatisticsFn = async (): Promise<Statistics> => {
 }
 
 export const useGetStatistics = () => {
-  const { data, isLoading, isError, error } = useQuery(
-    'statistics',
-    getStatisticsFn,
-    {},
-  )
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['statistics'],
+    queryFn: getStatisticsFn,
+  })
 
   useEffect(() => {
     if (isError && error) {

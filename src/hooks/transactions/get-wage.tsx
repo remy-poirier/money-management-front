@@ -30,11 +30,10 @@ const getLastWageFn = async (): Promise<number> => {
 }
 
 export const useGetWage = () => {
-  const { data, isLoading, isError, error } = useQuery(
-    'getWage',
-    getLastWageFn,
-    {},
-  )
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['getWage'],
+    queryFn: getLastWageFn,
+  })
 
   useEffect(() => {
     if (isError && error) {
