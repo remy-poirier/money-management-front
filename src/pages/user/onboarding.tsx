@@ -76,7 +76,7 @@ export const Onboarding = () => {
           <ul className="flex justify-center steps">
             <li
               className={cn(
-                'step text-sm  w-[100%]',
+                'step text-sm  w-full',
                 isStepDoneOrCurrent(OnboardingStatus.WELCOME) && 'step-primary',
               )}
             >
@@ -84,7 +84,7 @@ export const Onboarding = () => {
             </li>
             <li
               className={cn(
-                'step text-sm w-[100%]',
+                'step text-sm w-full',
                 isStepDoneOrCurrent(OnboardingStatus.AMOUNT_ON_ACCOUNT)
                   ? 'step-primary'
                   : '',
@@ -94,7 +94,7 @@ export const Onboarding = () => {
             </li>
             <li
               className={cn(
-                'step text-sm  w-[100%]',
+                'step text-sm  w-full',
                 isStepDoneOrCurrent(OnboardingStatus.RECURRING)
                   ? 'step-primary'
                   : '',
@@ -104,7 +104,7 @@ export const Onboarding = () => {
             </li>
             <li
               className={cn(
-                'step text-sm  w-[100%]',
+                'step text-sm  w-full',
                 isStepDoneOrCurrent(OnboardingStatus.ONBOARDED)
                   ? 'step-primary'
                   : '',

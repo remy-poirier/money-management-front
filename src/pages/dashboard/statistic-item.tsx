@@ -33,7 +33,7 @@ const StatisticsItem = ({
 }: Props) => {
   return (
     <div>
-      <Card className="h-[100%]">
+      <Card className="h-full">
         <CardHeader>
           <CardTitle className="flex justify-between">
             {label}
@@ -41,7 +41,7 @@ const StatisticsItem = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {isLoading && <Skeleton className="w-full h-[1.5rem]" />}
+          {isLoading && <Skeleton className="w-full h-6" />}
           {!isLoading && (
             <>
               <span

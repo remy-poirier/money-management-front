@@ -37,22 +37,22 @@ export const TransactionItemDesktop = ({
     return (
       <TableRow className="hidden md:table-row">
         <TableCell>
-          <Skeleton className="h-[1rem] w-full" />
+          <Skeleton className="h-4 w-full" />
         </TableCell>
         <TableCell>
-          <Skeleton className="h-[1rem] w-full" />
+          <Skeleton className="h-4 w-full" />
         </TableCell>
         <TableCell>
-          <Skeleton className="h-[1rem] w-full" />
+          <Skeleton className="h-4 w-full" />
         </TableCell>
         <TableCell>
-          <Skeleton className="h-[1rem] w-full" />
+          <Skeleton className="h-4 w-full" />
         </TableCell>
         <TableCell>
-          <Skeleton className="h-[1rem] w-full" />
+          <Skeleton className="h-4 w-full" />
         </TableCell>
         <TableCell className="text-right">
-          <Skeleton className="h-[1rem] w-full" />
+          <Skeleton className="h-4 w-full" />
         </TableCell>
       </TableRow>
     )

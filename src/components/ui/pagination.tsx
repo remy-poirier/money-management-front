@@ -32,7 +32,7 @@ const PaginationContent = React.forwardRef<
 PaginationContent.displayName = 'PaginationContent'
 
 const paginationItemVariants = cva(
-  'border bg-background shadow-sm border-input rounded-md text-sm cursor-pointer',
+  'border bg-background shadow-xs border-input rounded-md text-sm cursor-pointer',
   {
     variants: {
       variant: {
@@ -77,7 +77,7 @@ const PaginationLink = ({
     className={cn(
       disabled || isActive ? 'cursor-not-allowed' : 'cursor-pointer',
       buttonVariants({
-        variant: isActive ? 'outline' : 'ghost',
+        variant: isActive ? 'outline-solid' : 'ghost',
         size,
       }),
       className,

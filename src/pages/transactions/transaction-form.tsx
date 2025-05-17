@@ -238,7 +238,7 @@ export const TransactionForm = ({
               <FormField
                 name="collected"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm gap-2">
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-xs gap-2">
                     <div className="space-y-0.5">
                       <FormLabel>Collecté</FormLabel>
                       <FormDescription>
