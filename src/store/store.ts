@@ -51,7 +51,6 @@ export const useUserStore = create<UserStore>()((set) => ({
     }),
   updateCurrency: (currency: string) =>
     set((state) => {
-      console.log('ooooook => ', currency)
       if (!state.user) {
         return state
       }

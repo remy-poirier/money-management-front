@@ -9,7 +9,6 @@ import { getTokenOrFail } from '@/lib/utils.ts'
 const getTransactionsFn =
   (transactionSearch: TransactionSearch) =>
   async ({ pageParam = 1 }): Promise<Paginate<Transaction>> => {
-    console.log('ok page param => ', pageParam)
     const token = getTokenOrFail()
     if (!token) return Promise.reject('No token found')
 

@@ -15,11 +15,15 @@ import EditButtonWage from '@/pages/dashboard/edit-wage-button.tsx'
 import { useGetStatistics } from '@/hooks/statistics/get-statistics.tsx'
 import { ResetData } from '@/pages/dashboard/reset-data.tsx'
 import { Progress } from '@/components/ui/progress.tsx'
+import { useGetLastTransactions } from '@/hooks/transactions/last-transactions.tsx'
+import { TransactionCategory } from '@/pages/transactions/transaction-category.tsx'
+import { Transaction, TransactionType } from '@/domain/transaction.ts'
 
 export const Dashboard = () => {
   const user = useUserStore((state) => state.user)
   const { wage, isLoading: loadingLastWage } = useGetWage()
   const { statistics, isLoading } = useGetStatistics()
+  const { lastTransactions } = useGetLastTransactions()
 
   if (!user) return <Navigate to="/" />
 
@@ -39,10 +43,30 @@ export const Dashboard = () => {
     return 'bg-green-600'
   }
 
+  const transactionDate = (day: number) => {
+    const date = new Date()
+    date.setDate(day)
+    return Intl.DateTimeFormat('fr', {
+      day: '2-digit',
+      month: '2-digit',
+    }).format(date)
+  }
+
+  const transationTypeText = (transactionType: TransactionType) => {
+    switch (transactionType) {
+      case TransactionType.ONE_TIME:
+        return 'Paiement'
+      case TransactionType.RECURRING:
+        return 'Prélèvement'
+      case TransactionType.REFUND:
+      default:
+        return 'Remboursement'
+    }
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <ResetData />
-      {JSON.stringify(statistics)}
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <StatisticItem
           label="Montant sur compte"
@@ -106,6 +130,46 @@ export const Dashboard = () => {
           icon={<Banknote />}
           helper={`Réparti en ${statistics?.transactions.refunds.toCome} remboursement${(statistics?.transactions.refunds.toCome ?? 0) > 1 ? 's' : ''}`}
         />
+      </div>
+
+      <div className="grid gap-8 grid-cols-2">
+        <div>
+          <h3 className="text-xl font-bold mb-4">
+            Derniers mouvements collectés
+          </h3>
+          <div className="flex flex-col gap-4">
+            {lastTransactions.map((transaction) => (
+              <div className="flex border p-4 rounded-xl text-sm justify-between">
+                <span className="text-primary font-bold">
+                  {transactionDate(transaction.day)}
+                </span>
+                <span className="flex gap-2 items-center">
+                  <div className="flex gap-2">
+                    <TransactionCategory categoryId={transaction.category.id} />
+                    <div className="flex flex-col gap-1">
+                      <span className="font-bold">{transaction.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {transationTypeText(transaction.type)}
+                      </span>
+                    </div>
+                  </div>
+                </span>
+
+                <span>
+                  {Intl.NumberFormat('fr', {
+                    style: 'currency',
+                    currency: 'EUR',
+                    signDisplay: 'always',
+                  }).format(
+                    parseFloat(
+                      `${transaction.type === 'REFUND' ? '+' : '-'}${transaction.amount}`,
+                    ),
+                  )}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
